@@ -1,0 +1,145 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import HeroSection from '@components/sections/landing/HeroSection.astro';
+import HeroSectionAlt from '@components/sections/landing/HeroSectionAlt.astro';
+import ClientsSection from '@components/sections/landing/ClientsSection.astro';
+import FeaturesGeneral from '@components/sections/features/FeaturesGeneral.astro';
+import FeaturesNavs from '@components/sections/features/FeaturesNavs.astro';
+import TestimonialsSection from '@components/sections/testimonials/TestimonialsSection.astro';
+import PricingSection from '@components/sections/pricing/PricingSection.astro';
+import FAQ from '@components/sections/misc/FAQ.astro';
+import AnnouncementBanner from '@components/ui/banners/AnnouncementBanner.astro';
+import CardBlog from '@components/ui/cards/CardBlog.astro';
+import heroImage from '@images/personal/hero.avif';
+import featureImage from '@images/personal/feature-1.avif';
+import construction from '@images/personal/feature-1.avif';
+import tools from '@images/personal/hero.avif';
+import dashboard from '@images/personal/feature-1.avif';
+import { partnersData } from '@data/constants';
+import { getCopy } from '@/copy';
+import { localePath, type MarketingLocale } from '@utils/locale';
+import { entriesFor } from '@utils/content';
+
+/** The home page in one locale. Copy comes from the locale's copy table. */
+interface Props {
+  locale: MarketingLocale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+const copy = t.home;
+const recentBlogPosts = (await entriesFor('blog', locale)).slice(0, 3);
+
+import avatarImage from '@images/personal/avatar.webp';
+
+const avatarSrcs = [avatarImage, avatarImage, avatarImage, avatarImage];
+
+const testimonials = copy.testimonials.quotes.map(quote => ({
+  ...quote,
+  avatarSrc: avatarImage,
+}));
+---
+
+<MainLayout>
+  <AnnouncementBanner
+    btnId="dismiss-button"
+    btnTitle={copy.banner}
+    url="https://github.com/xmore2025/web_xmore2025_screwfast_20261020"
+  />
+
+  <HeroSection
+    title={copy.hero.title}
+    subTitle={copy.hero.subTitle}
+    primaryBtn={copy.hero.primaryBtn}
+    primaryBtnURL={localePath(locale, '/products')}
+    secondaryBtn={copy.hero.secondaryBtn}
+    secondaryBtnURL={localePath(locale, '/contact')}
+    withReview={true}
+    avatars={avatarSrcs}
+    rating={copy.hero.rating}
+    starCount={4}
+    reviews={copy.hero.reviews}
+    src={heroImage}
+    alt={copy.hero.imageAlt}
+  />
+
+  <ClientsSection
+    title={copy.clients.title}
+    subTitle={copy.clients.subTitle}
+    partners={partnersData}
+  />
+
+  <FeaturesGeneral
+    title={copy.featuresGeneral.title}
+    subTitle={copy.featuresGeneral.subTitle}
+    src={featureImage}
+    alt={copy.featuresGeneral.imageAlt}
+    features={t.data.features}
+  />
+
+  <FeaturesNavs
+    title={copy.featuresNavs.title}
+    tabs={[
+      {
+        ...copy.featuresNavs.tabs.tools,
+        svg: 'tools',
+        src: tools,
+        first: true,
+      },
+      {
+        ...copy.featuresNavs.tabs.dashboard,
+        svg: 'dashboard',
+        src: dashboard,
+        second: true,
+      },
+      {
+        ...copy.featuresNavs.tabs.features,
+        svg: 'house',
+        src: construction,
+      },
+    ]}
+  />
+
+  <TestimonialsSection
+    title={copy.testimonials.title}
+    subTitle={copy.testimonials.subTitle}
+    testimonials={testimonials}
+    statistics={copy.testimonials.statistics}
+  />
+
+  {recentBlogPosts.length > 0 && (
+    <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div class="max-w-2xl">
+          <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl dark:text-neutral-200">
+            {copy.blog.title}
+          </h2>
+          <p class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">
+            {copy.blog.subTitle}
+          </p>
+        </div>
+        <a
+          class="font-semibold text-neutral-800 underline underline-offset-4 transition hover:text-orange-500 dark:text-neutral-200"
+          href={localePath(locale, '/blog')}
+        >
+          {copy.blog.viewAll}
+        </a>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {recentBlogPosts.map(blogEntry => (
+          <CardBlog blogEntry={blogEntry} />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <PricingSection pricing={t.data.pricing} />
+
+  <FAQ title={copy.faqTitle} faqs={t.data.faqs} />
+
+  <HeroSectionAlt
+    title={copy.heroAlt.title}
+    subTitle={copy.heroAlt.subTitle}
+    url="https://github.com/xmore2025/web_xmore2025_screwfast_20261020"
+  />
+</MainLayout>

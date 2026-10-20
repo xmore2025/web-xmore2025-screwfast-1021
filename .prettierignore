@@ -1,0 +1,16 @@
+# dependencies / lockfiles (Dependabot regenerates these; never format)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+node_modules/
+.codeartsdoer/
+
+# build / generated
+dist/
+.astro/
+.vercel/
+
+# env / OS
+.env
+.env.*
+.DS_Store

@@ -1,0 +1,252 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { Image } from 'astro:assets';
+import Icon from '@components/ui/icons/Icon.astro';
+import { getCopy } from '@/copy';
+import { entriesFor, pathFor } from '@utils/content';
+import { localePath, type MarketingLocale } from '@utils/locale';
+
+interface Props {
+  locale: MarketingLocale;
+}
+
+const { locale } = Astro.props;
+const copy = getCopy(locale).portfolioPage;
+const photos = await entriesFor('photography', locale);
+const experiments = await entriesFor('experiments', locale);
+
+const works = [
+  ...photos.map(photo => ({
+    id: photo.id,
+    title: photo.data.title,
+    description: photo.data.description,
+    image: photo.data.cardImage,
+    imageAlt: photo.data.cardImageAlt,
+    href: pathFor(photo),
+    category: 'photography' as const,
+    date: photo.data.shootDate,
+  })),
+  ...experiments.map(experiment => ({
+    id: experiment.id,
+    title: experiment.data.title,
+    description: experiment.data.description,
+    image: experiment.data.cardImage,
+    imageAlt: experiment.data.cardImageAlt,
+    href: pathFor(experiment),
+    category: 'experiments' as const,
+    date: experiment.data.experimentDate,
+  })),
+].sort(
+  (first, second) =>
+    (second.date?.valueOf() ?? 0) - (first.date?.valueOf() ?? 0)
+);
+
+const featuredWork = works[0];
+const archiveWorks = featuredWork
+  ? works.filter(work => work.id !== featuredWork.id)
+  : works;
+---
+
+<MainLayout
+  title={copy.title}
+  description={copy.metaDescription}
+  ogTitle={copy.ogTitle}
+>
+  <section class="bg-[#17231f] text-white">
+    <div class="mx-auto grid max-w-[85rem] gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-16 lg:px-8 lg:py-24 2xl:max-w-full">
+      <div class="max-w-2xl">
+        <p class="inline-flex items-center gap-2 text-sm font-semibold text-[#d7f568]">
+          <span class="size-2 rounded-full bg-[#f17a62]"></span>
+          {copy.eyebrow}
+        </p>
+        <h1 class="mt-6 font-serif text-5xl leading-[1.05] text-balance sm:text-6xl lg:text-7xl">
+          {copy.heading}
+        </h1>
+        <p class="mt-6 max-w-xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
+          {copy.subTitle}
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-5">
+          <a
+            class="inline-flex items-center gap-2 bg-[#d7f568] px-5 py-3 text-sm font-bold text-[#17231f] transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d7f568]"
+            href={localePath(locale, '/contact')}
+          >
+            {copy.contactCta}
+            <Icon name="arrowRight" class="size-4" />
+          </a>
+          <span class="text-sm text-white/60">{copy.location}</span>
+        </div>
+        <dl class="mt-12 grid max-w-md grid-cols-2 gap-6 border-t border-white/15 pt-6">
+          <div>
+            <dt class="text-sm text-white/55">{copy.photographyCount}</dt>
+            <dd class="mt-1 text-2xl font-semibold text-[#d7f568]">
+              {photos.length}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm text-white/55">{copy.experimentsCount}</dt>
+            <dd class="mt-1 text-2xl font-semibold text-[#d7f568]">
+              {experiments.length}
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      {featuredWork && (
+        <a
+          class="group relative block min-h-[22rem] overflow-hidden bg-[#263a32] sm:min-h-[30rem]"
+          href={featuredWork.href}
+          aria-label={`${copy.featuredLabel}: ${featuredWork.title}`}
+        >
+          <Image
+            class="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-105"
+            src={featuredWork.image}
+            alt={featuredWork.imageAlt}
+            format="avif"
+            draggable={false}
+          />
+          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-linear-to-t from-black/80 to-transparent p-5 pt-20 sm:p-7 sm:pt-24">
+            <div>
+              <p class="text-xs font-semibold text-[#d7f568]">
+                {copy.featuredLabel}
+              </p>
+              <h2 class="mt-2 text-xl font-bold text-white sm:text-2xl">
+                {featuredWork.title}
+              </h2>
+            </div>
+            <span class="mb-1 flex size-10 shrink-0 items-center justify-center rounded-full bg-[#d7f568] text-[#17231f] transition group-hover:translate-x-1">
+              <Icon name="arrowRight" class="size-5" />
+            </span>
+          </div>
+          <span class="absolute right-4 top-4 bg-[#f17a62] px-3 py-1 text-xs font-bold text-[#17231f]">
+            {copy.featuredTag}
+          </span>
+        </a>
+      )}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 md:py-20 lg:px-8 2xl:max-w-full">
+    <div class="flex flex-col justify-between gap-6 border-b border-neutral-400/70 pb-6 sm:flex-row sm:items-end dark:border-neutral-600">
+      <div>
+        <p class="text-sm font-semibold text-[#bb5d48] dark:text-[#ff9b83]">
+          {copy.workIndex}
+        </p>
+        <h2 class="mt-2 font-serif text-3xl text-neutral-900 sm:text-4xl dark:text-neutral-100">
+          {copy.selectedWork}
+        </h2>
+      </div>
+      <div
+        class="inline-flex w-fit gap-1 border border-neutral-400/70 p-1 dark:border-neutral-600"
+        role="group"
+        aria-label={copy.filterLabel}
+      >
+        <button
+          class="bg-[#17231f] px-3 py-2 text-sm font-semibold text-white sm:px-4"
+          type="button"
+          data-portfolio-filter="all"
+          aria-pressed="true"
+        >
+          {copy.filters.all}
+        </button>
+        <button
+          class="px-3 py-2 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-300 sm:px-4 dark:text-neutral-200 dark:hover:bg-neutral-700"
+          type="button"
+          data-portfolio-filter="photography"
+          aria-pressed="false"
+        >
+          {copy.filters.photography}
+        </button>
+        <button
+          class="px-3 py-2 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-300 sm:px-4 dark:text-neutral-200 dark:hover:bg-neutral-700"
+          type="button"
+          data-portfolio-filter="experiments"
+          aria-pressed="false"
+        >
+          {copy.filters.experiments}
+        </button>
+      </div>
+    </div>
+
+    {archiveWorks.length > 0 ? (
+      <div class="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        {archiveWorks.map((work, index) => (
+          <a
+            class:list={['group block', index === 0 && 'sm:col-span-2']}
+            href={work.href}
+            data-portfolio-work
+            data-work-category={work.category}
+          >
+            <div
+              class:list={[
+                'relative overflow-hidden bg-neutral-300 dark:bg-neutral-700',
+                index === 0 ? 'aspect-[16/9]' : 'aspect-[4/3]',
+              ]}
+            >
+              <Image
+                class="size-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                src={work.image}
+                alt={work.imageAlt}
+                format="avif"
+                loading="lazy"
+                draggable={false}
+              />
+              <span class="absolute left-3 top-3 bg-[#d7f568] px-3 py-1 text-xs font-bold text-[#17231f]">
+                {work.category === 'photography'
+                  ? copy.filters.photography
+                  : copy.filters.experiments}
+              </span>
+            </div>
+            <div class="mt-4 flex items-start justify-between gap-4">
+              <div>
+                <h3 class="text-xl font-semibold text-neutral-900 group-hover:text-[#bb5d48] dark:text-neutral-100 dark:group-hover:text-[#ff9b83]">
+                  {work.title}
+                </h3>
+                <p class="mt-2 max-w-xl text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+                  {work.description}
+                </p>
+              </div>
+              <Icon
+                name="arrowRight"
+                class="mt-1 size-5 shrink-0 text-neutral-500 transition group-hover:translate-x-1 group-hover:text-[#bb5d48]"
+              />
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="py-12 text-neutral-600 dark:text-neutral-400">
+        {copy.emptyState}
+      </p>
+    )}
+  </section>
+
+  <script>
+    const filters = document.querySelectorAll<HTMLButtonElement>(
+      '[data-portfolio-filter]'
+    );
+    const works = document.querySelectorAll<HTMLElement>(
+      '[data-portfolio-work]'
+    );
+
+    filters.forEach(filter => {
+      filter.addEventListener('click', () => {
+        const selectedCategory = filter.dataset.portfolioFilter;
+
+        filters.forEach(button => {
+          const isSelected = button === filter;
+          button.setAttribute('aria-pressed', String(isSelected));
+          button.classList.toggle('bg-[#17231f]', isSelected);
+          button.classList.toggle('text-white', isSelected);
+          button.classList.toggle('text-neutral-700', !isSelected);
+          button.classList.toggle('dark:text-neutral-200', !isSelected);
+        });
+
+        works.forEach(work => {
+          work.hidden =
+            selectedCategory !== 'all' &&
+            work.dataset.workCategory !== selectedCategory;
+        });
+      });
+    });
+  </script>
+</MainLayout>

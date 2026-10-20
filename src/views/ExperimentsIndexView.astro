@@ -1,0 +1,96 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { Image } from 'astro:assets';
+import Icon from '@components/ui/icons/Icon.astro';
+import { entriesFor, pathFor } from '@utils/content';
+import { getCopy } from '@/copy';
+import type { MarketingLocale } from '@utils/locale';
+
+interface Props {
+  locale: MarketingLocale;
+}
+
+const { locale } = Astro.props;
+const copy = getCopy(locale).experimentsIndex;
+
+const experiments = await entriesFor('experiments', locale);
+
+const statusStyles: Record<string, string> = {
+  idea: 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300',
+  'in-progress':
+    'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
+  done: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+  archived: 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400',
+};
+---
+
+<MainLayout
+  title={copy.title}
+  description={copy.metaDescription}
+  ogTitle={copy.ogTitle}
+>
+  <section class="mx-auto max-w-[85rem] space-y-8 px-4 pt-16 sm:px-6 lg:px-8 2xl:max-w-full">
+    <div class="mx-auto max-w-3xl text-left sm:text-center">
+      <h1 class="block text-4xl font-bold tracking-tight text-balance text-neutral-800 md:text-5xl lg:text-6xl dark:text-neutral-200">
+        {copy.heading}
+      </h1>
+      <p class="mt-4 text-lg text-pretty text-neutral-600 dark:text-neutral-400">
+        {copy.subTitle}
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
+    {experiments.length === 0 ? (
+      <p class="text-center text-neutral-600 dark:text-neutral-400">
+        {copy.noExperiments}
+      </p>
+    ) : (
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {experiments.map(exp => (
+          <a
+            class="group flex flex-col rounded-xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 transition duration-300 hover:shadow-md dark:bg-neutral-900 dark:ring-zinc-800"
+            href={pathFor(exp)}
+          >
+            <div class="relative mb-4 overflow-hidden rounded-lg">
+              <Image
+                class="aspect-video w-full object-cover transition duration-500 group-hover:scale-105"
+                src={exp.data.cardImage}
+                alt={exp.data.cardImageAlt}
+                format={'avif'}
+              />
+            </div>
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="text-lg font-bold text-neutral-800 group-hover:text-neutral-600 dark:text-neutral-200 dark:group-hover:text-neutral-400">
+                {exp.data.title}
+              </h3>
+              {exp.data.status && (
+                <span
+                  class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusStyles[exp.data.status] ?? ''}`}
+                >
+                  {exp.data.status}
+                </span>
+              )}
+            </div>
+            <p class="mt-2 flex-1 text-sm text-neutral-600 dark:text-neutral-400">
+              {exp.data.description}
+            </p>
+            {exp.data.tags && exp.data.tags.length > 0 && (
+              <div class="mt-4 flex flex-wrap gap-2">
+                {exp.data.tags.map(tag => (
+                  <span class="rounded-md bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            <p class="mt-4 inline-flex items-center gap-x-1 text-sm font-medium text-orange-400 group-hover:underline dark:text-orange-300">
+              {copy.readMore}
+              <Icon name="arrowRight" class="size-4 shrink-0" />
+            </p>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+</MainLayout>

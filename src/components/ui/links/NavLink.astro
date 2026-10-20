@@ -1,0 +1,39 @@
+---
+// Destructure the properties from Astro.props
+const { url, name } = Astro.props;
+
+// Define TypeScript interface for the properties
+interface Props {
+  url: string;
+  name: string;
+}
+
+const normalizePath = (path: string) =>
+  path.replace(/^\/zh(?=\/|$)/, '').replace(/\/$/, '') || '/';
+const currentPath = normalizePath(Astro.url.pathname);
+const targetPath = normalizePath(url);
+const isActive =
+  currentPath === targetPath ||
+  (targetPath !== '/' && currentPath.startsWith(`${targetPath}/`));
+---
+
+{/*
+Re-usable link component for navigation bar. Highlights the active link
+by comparing the current URL with the href of each link.
+We assign an ID matching the URL for easy reference in our script.
+If URL is '/' (home page), assign ID as 'home' 
+*/}
+<a
+  id={targetPath === '/' ? 'home' : targetPath.replaceAll('/', '')}
+  href={url}
+  data-astro-prefetch
+  aria-current={isActive ? 'page' : undefined}
+  class:list={[
+    'rounded-lg text-base font-medium ring-zinc-500 outline-hidden focus-visible:ring-3 md:py-3 md:text-sm 2xl:text-base dark:ring-zinc-200 dark:focus:outline-hidden',
+    isActive
+      ? 'text-orange-400 dark:text-orange-300'
+      : 'text-neutral-600 hover:text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-500',
+  ]}
+>
+  {name}
+</a>

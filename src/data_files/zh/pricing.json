@@ -1,0 +1,29 @@
+{
+  "title": "简单、透明的定价",
+  "subTitle": "通过 XMore Studio 清晰且价值导向的方案提升效率。",
+  "badge": "最佳价值",
+  "thirdOption": "企业解决方案？",
+  "btnText": "获取定制报价",
+
+  "starterKit": {
+    "name": "入门套件",
+    "description": "DIY 项目的最佳选择",
+    "price": "49",
+    "cents": ".00",
+    "billingFrequency": "美元 / 每月",
+    "features": ["关键五金工具", "访问指南和教程", "标准支持"],
+    "purchaseBtnTitle": "获取入门套件",
+    "purchaseLink": "#"
+  },
+
+  "professionalToolbox": {
+    "name": "专业工具箱",
+    "description": "适用于大规模使用",
+    "price": "89",
+    "cents": ".00",
+    "billingFrequency": "美元 / 每月",
+    "features": ["优质工具选择", "优先支持", "独家内容和优惠", "批量订购折扣"],
+    "purchaseBtnTitle": "获取专业工具箱",
+    "purchaseLink": "#"
+  }
+}
