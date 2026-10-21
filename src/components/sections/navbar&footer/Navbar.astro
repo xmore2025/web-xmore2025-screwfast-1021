@@ -20,11 +20,12 @@ const isDarkHeroPage = /^\/(zh\/)?portfolio\/?$/.test(Astro.url.pathname);
 {/* Main header component */}
 <header
   class="sticky inset-x-0 top-4 z-50 flex w-full flex-wrap text-sm md:flex-nowrap md:justify-start"
+  data-navbar
   data-navbar-tone={isDarkHeroPage ? 'on-dark' : undefined}
 >
   {/* Navigation container */}
   <nav
-    class="relative mx-2 w-[calc(100%-1rem)] rounded-[36px] border border-yellow-100/40 bg-yellow-50/60 px-4 py-3 backdrop-blur-md md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto dark:border-neutral-700/40 dark:bg-neutral-800/80 dark:backdrop-blur-md"
+    class="relative mx-2 w-[calc(100%-1rem)] px-4 py-3 md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto"
     aria-label="Global"
   >
     <div class="flex items-center justify-between">
@@ -178,8 +179,15 @@ const isDarkHeroPage = /^\/(zh\/)?portfolio\/?$/.test(Astro.url.pathname);
   让导航成为 Hero 同色系的深墨绿玻璃，避免浅色胶囊压住大图配色。
 */}
 <style is:global>
-  /* 填平浮动胶囊上方的 16px 间隙，使顶部与 Hero 连成一体 */
-  [data-navbar-tone='on-dark']::before {
+  /*
+    Navigation background policy:
+    - At the top of the page the bar is fully transparent (no beige capsule).
+    - Once the page scrolls, a barely-there scrim of the page colour plus a
+      blur keeps the links legible when content passes underneath.
+    - Dark-hero pages (portfolio) paint the strip above the hero in the hero
+      colour so the top edge reads as one continuous block.
+  */
+  [data-navbar-tone='on-dark']:not([data-scrolled='true'])::before {
     content: '';
     position: absolute;
     inset: -1rem 0 auto 0;
@@ -188,10 +196,35 @@ const isDarkHeroPage = /^\/(zh\/)?portfolio\/?$/.test(Astro.url.pathname);
     z-index: -1;
   }
 
-  [data-navbar-tone='on-dark'] nav {
-    /* 与作品集 Hero 完全同色，避免浅色胶囊压住大图配色 */
-    background-color: #17231f;
-    border-color: rgb(255 255 255 / 0.14);
+  [data-navbar][data-scrolled='true'] nav {
+    background-color: rgb(229 229 229 / 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+
+  .dark [data-navbar][data-scrolled='true'] nav {
+    background-color: rgb(38 38 38 / 0.82);
+  }
+
+  [data-navbar][data-navbar-tone='on-dark'][data-scrolled='true'] nav {
+    background-color: rgb(23 35 31 / 0.9);
+  }
+
+  /* 移动端展开菜单时补一层底，否则菜单会悬空叠在内容上 */
+  @media (width < 48rem) {
+    [data-navbar] nav:has(.hs-collapse:not(.hidden)) {
+      background-color: rgb(229 229 229 / 0.96);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+    }
+
+    .dark [data-navbar] nav:has(.hs-collapse:not(.hidden)) {
+      background-color: rgb(38 38 38 / 0.96);
+    }
+
+    [data-navbar][data-navbar-tone='on-dark'] nav:has(.hs-collapse:not(.hidden)) {
+      background-color: rgb(23 35 31 / 0.96);
+    }
   }
 
   /* 链接与按钮：浅色文字 + 荧光绿高亮 */
@@ -210,15 +243,6 @@ const isDarkHeroPage = /^\/(zh\/)?portfolio\/?$/.test(Astro.url.pathname);
     color: #d7f568;
   }
 
-  /* 品牌 Logo：文字转白，黄色装饰块换成 Hero 的荧光绿 */
-  [data-navbar-tone='on-dark'] nav svg .text-neutral-700 {
-    color: #f3f6ef;
-  }
-
-  [data-navbar-tone='on-dark'] nav svg .text-yellow-500 {
-    color: #d7f568;
-  }
-
   /* 登录按钮左侧分隔线 */
   [data-navbar-tone='on-dark'] nav button[data-hs-overlay] {
     border-color: rgb(255 255 255 / 0.18);
@@ -229,3 +253,14 @@ const isDarkHeroPage = /^\/(zh\/)?portfolio\/?$/.test(Astro.url.pathname);
     color: #f3f6ef;
   }
 </style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-navbar]');
+  if (header) {
+    const sync = () => {
+      header.dataset.scrolled = window.scrollY > 8 ? 'true' : 'false';
+    };
+    sync();
+    window.addEventListener('scroll', sync, { passive: true });
+  }
+</script>
