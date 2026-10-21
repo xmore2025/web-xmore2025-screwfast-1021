@@ -10,5 +10,8 @@
 
 # Content-hashed build assets (/_astro/*): filenames change on content change,
 # so they are safe to cache immutably. HTML above stays must-revalidate.
+# `! Cache-Control` detaches the inherited rule, otherwise Cloudflare appends
+# both values and the browser honours the shorter max-age.
 /_astro/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
