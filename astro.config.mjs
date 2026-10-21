@@ -90,7 +90,7 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/xmore2025/web_xmore2025_screwfast_20261020',
+          href: 'https://github.com/xmore2025/web-xmore2025-screwfast-1021',
         },
       ],
       disable404Route: true,

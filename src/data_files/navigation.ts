@@ -61,7 +61,7 @@ export const footerSections: {
 export const socialLinks = {
   facebook: 'https://www.facebook.com/',
   x: 'https://twitter.com/',
-  github: 'https://github.com/xmore2025/web_xmore2025_screwfast_20261020',
+  github: 'https://github.com/xmore2025/web-xmore2025-screwfast-1021',
   google: 'https://www.google.com/',
   slack: 'https://slack.com/',
 };
