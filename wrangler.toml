@@ -2,7 +2,7 @@ name = "web-xmore2025-screwfast-1021"
 compatibility_date = "2024-11-01"
 workers_dev = true
 
-routes = [{ pattern = "webmax.xmorexz.dpdns.org", custom_domain = true }]
+routes = [{ pattern = "web.xmorexz.dpdns.org", custom_domain = true }]
 
 [assets]
 directory = "./dist"

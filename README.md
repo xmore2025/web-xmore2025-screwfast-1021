@@ -205,7 +205,7 @@ Entries hold geometry only; size and colour come from the `class` you pass (ever
 
 `pnpm build` produces a static site in `dist/` that any static host can serve.
 
-- **Cloudflare Workers (current):** [`wrangler.toml`](wrangler.toml) deploys `dist/` as static assets on the custom domain `webmax.xmorexz.dpdns.org`. Security response headers and caching live in [`public/_headers`](public/_headers) (copied to `dist/` on build).
+- **Cloudflare Workers (current):** [`wrangler.toml`](wrangler.toml) deploys `dist/` as static assets on the custom domain `web.xmorexz.dpdns.org`. Security response headers and caching live in [`public/_headers`](public/_headers) (copied to `dist/` on build).
 - **Vercel / Netlify:** `dist/` is a plain static site and deploys to any host as-is.
 
 ---

@@ -32,13 +32,13 @@ const EXPECTATIONS = {
   '/zh/': [
     '<html lang="zh-CN"',
     '<meta property="og:locale" content="zh_CN"',
-    'hreflang="en" href="https://webmax.xmorexz.dpdns.org"',
+    'hreflang="en" href="https://web.xmorexz.dpdns.org"',
   ],
   '/portfolio/': ['Selected work', 'Photography'],
   '/zh/portfolio/': ['精选作品', '摄影'],
   '/': [
     '<html lang="en"',
-    'hreflang="zh-CN" href="https://webmax.xmorexz.dpdns.org/zh"',
+    'hreflang="zh-CN" href="https://web.xmorexz.dpdns.org/zh"',
   ],
   '/zh/404/': ['<html lang="zh-CN"'],
   '/contact/': ['data-demo-form', 'data-demo-status'],

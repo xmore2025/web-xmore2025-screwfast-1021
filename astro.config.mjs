@@ -8,7 +8,7 @@ import mdx from '@astrojs/mdx';
 // https://astro.build/config
 export default defineConfig({
   // https://docs.astro.build/en/guides/images/#authorizing-remote-images
-  site: 'https://webmax.xmorexz.dpdns.org',
+  site: 'https://web.xmorexz.dpdns.org',
   image: {
     domains: ['images.unsplash.com'],
   },
@@ -108,14 +108,14 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             property: 'og:image',
-            content: 'https://webmax.xmorexz.dpdns.org' + '/social.webp',
+            content: 'https://web.xmorexz.dpdns.org' + '/social.webp',
           },
         },
         {
           tag: 'meta',
           attrs: {
             property: 'twitter:image',
-            content: 'https://webmax.xmorexz.dpdns.org' + '/social.webp',
+            content: 'https://web.xmorexz.dpdns.org' + '/social.webp',
           },
         },
       ],

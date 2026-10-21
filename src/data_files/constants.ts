@@ -6,7 +6,7 @@ export const SITE = {
   description:
     'XMore Studio is a personal creative space showcasing photography, projects, notes, and experiments by XMore. A quiet corner of the web to explore ideas and share work.',
   description_short: 'A personal portfolio and creative space by XMore.',
-  url: 'https://webmax.xmorexz.dpdns.org',
+  url: 'https://web.xmorexz.dpdns.org',
   author: 'XMore',
 };
 
