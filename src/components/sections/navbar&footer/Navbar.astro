@@ -222,7 +222,8 @@ const isDarkHeroPage = /^\/(zh\/)?portfolio\/?$/.test(Astro.url.pathname);
       background-color: rgb(38 38 38 / 0.96);
     }
 
-    [data-navbar][data-navbar-tone='on-dark'] nav:has(.hs-collapse:not(.hidden)) {
+    [data-navbar][data-navbar-tone='on-dark']
+      nav:has(.hs-collapse:not(.hidden)) {
       background-color: rgb(23 35 31 / 0.96);
     }
   }
