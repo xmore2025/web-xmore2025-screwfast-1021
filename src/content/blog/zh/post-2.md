@@ -9,6 +9,7 @@ cardImage: '@/images/blog/post-2.avif'
 cardImageAlt: '穿黑运动裤的男子使用 DEWALT 圆锯切割木板'
 readTime: 5
 tags: ['安全', '工艺', '管理']
+categories: ['craft']
 ---
 
 在建筑方面，安全和优质工艺是不可谈判的。在 XMore Studio，我们为提供一系列优先考虑这两者的建筑服务而感到自豪，确保您的项目建得持久。

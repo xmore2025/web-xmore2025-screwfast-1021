@@ -10,6 +10,7 @@ cardImage: '@/images/blog/post-3.avif'
 cardImageAlt: '侧视图工人戴手套'
 readTime: 3
 tags: ['采购', '经济实惠', '效率']
+categories: ['tools']
 ---
 
 管理建筑项目可能令人感到不堪重负，特别是在采购方面。这就是为什么 XMore Studio 致力于简化此过程并让您的项目保持在预算范围内。

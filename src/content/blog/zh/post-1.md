@@ -9,6 +9,7 @@ cardImage: '@/images/blog/post-1.avif'
 cardImageAlt: '机械工具俯视图排列'
 readTime: 4
 tags: ['工具', '建筑', '工作流程']
+categories: ['tools']
 ---
 
 在当今快节奏的建筑行业中，效率是成功的关键。在 XMore Studio，我们深知优化项目工作流程以满足截止日期并保持预算的重要性。这就是为什么我们很高兴推出我们的尖端工具，旨在前所未有地为您的项目提供动力。

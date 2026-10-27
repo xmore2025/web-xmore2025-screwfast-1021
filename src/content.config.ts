@@ -5,6 +5,7 @@ import { z } from 'astro/zod';
 import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
+import { CATEGORY_IDS } from './data_files/category-ids';
 
 const productsCollection = defineCollection({
   loader: glob({
@@ -85,6 +86,12 @@ const blogCollection = defineCollection({
       cardImageAlt: z.string(),
       readTime: z.number(),
       tags: z.array(z.string()).optional(),
+      /**
+       * Browsable categories, from the taxonomy in `src/data_files/categories.ts`.
+       * Tags are free-form labels for a single post; categories are the
+       * curated, translated axes the `/categories/` index is built from.
+       */
+      categories: z.array(z.enum(CATEGORY_IDS)).default([]),
     }),
 });
 

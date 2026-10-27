@@ -32,6 +32,7 @@ export type FooterLinkId =
   | 'services'
   | 'about'
   | 'blog'
+  | 'categories'
   | 'careers'
   | 'customers';
 
@@ -52,6 +53,7 @@ export const footerSections: {
     links: [
       { id: 'about', path: '#' },
       { id: 'blog', path: '/blog' },
+      { id: 'categories', path: '/categories' },
       { id: 'careers', path: '#', badge: 'hiring' },
       { id: 'customers', path: '#' },
     ],

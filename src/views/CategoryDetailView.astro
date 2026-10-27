@@ -1,0 +1,198 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import CardPostRow from '@components/ui/cards/CardPostRow.astro';
+import Icon from '@components/ui/icons/Icon.astro';
+import { Image } from 'astro:assets';
+import { getCopy } from '@/copy';
+import { categorySummaries, type CategorySummary } from '@utils/categories';
+import { absoluteUrl } from '@utils/metadata';
+import { pathFor } from '@utils/content';
+import { formatDate } from '@utils/utils';
+import { localePath } from '@utils/locale';
+
+/**
+ * One category in one locale: every post filed under it, newest first.
+ *
+ * The header borrows the cover art and the category's accent colour, so a
+ * category page reads as a shelf with its own spine colour. Posts are rows
+ * (`CardPostRow`) rather than cards — on a listing page the title is the
+ * content, not the picture.
+ */
+interface Props {
+  summary: CategorySummary;
+}
+
+const { summary } = Astro.props;
+const { locale } = summary;
+const copy = getCopy(locale);
+const labels = copy.categoriesIndex;
+const page = copy.categoryPage;
+const item = labels.items[summary.id];
+const cover = summary.definition.cover;
+
+const meta = [
+  labels.entryCount(summary.count),
+  page.readingTotal(summary.readingMinutes),
+  summary.latest ? page.updated(formatDate(summary.latest, locale)) : null,
+].filter((piece): piece is string => Boolean(piece));
+
+/** Siblings for the "keep browsing" strip, busiest first. */
+const siblings = (await categorySummaries(locale)).filter(
+  sibling => sibling.id !== summary.id
+);
+---
+
+<MainLayout
+  title={item.title}
+  description={item.description}
+  section={labels.title}
+  kind={{
+    type: 'CollectionPage',
+    items: summary.entries.map(entry => ({
+      name: entry.data.title,
+      url: absoluteUrl(pathFor(entry)),
+    })),
+  }}
+>
+  <section class="border-b border-neutral-300/80 dark:border-neutral-700">
+    <div class="mx-auto max-w-[85rem] px-4 pt-8 pb-12 sm:px-6 md:pb-16 lg:px-8 2xl:max-w-full">
+      <nav aria-label="Breadcrumb" class="text-xs text-neutral-500">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li>
+            <a
+              class="transition hover:text-[#bb5d48] dark:hover:text-[#ff9b83]"
+              href={localePath(locale)}
+            >
+              {page.breadcrumbHome}
+            </a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <a
+              class="transition hover:text-[#bb5d48] dark:hover:text-[#ff9b83]"
+              href={localePath(locale, '/categories')}
+            >
+              {page.breadcrumbCategories}
+            </a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li
+            class="text-neutral-700 dark:text-neutral-300"
+            aria-current="page"
+          >
+            {item.title}
+          </li>
+        </ol>
+      </nav>
+
+      <div class="mt-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
+        <div class="max-w-2xl">
+          <p class="inline-flex items-center gap-2 text-sm font-semibold text-[#bb5d48] dark:text-[#ff9b83]">
+            <span aria-hidden="true">{summary.definition.emoji}</span>
+            {page.eyebrow}
+          </p>
+
+          <h1 class="mt-5 font-serif text-4xl leading-[1.05] text-balance text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
+            {item.title}
+          </h1>
+
+          <span
+            class="mt-6 block h-0.5 w-16"
+            style={`background-color: ${summary.definition.accent}`}
+            aria-hidden="true"
+          ></span>
+
+          <p class="mt-6 max-w-xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8 dark:text-neutral-400">
+            {item.description}
+          </p>
+
+          <ul class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-neutral-500">
+            {meta.map((piece, index) => (
+              <li class="inline-flex items-center gap-3">
+                {index > 0 && (
+                  <span
+                    class="size-1 rounded-full bg-neutral-400"
+                    aria-hidden="true"
+                  />
+                )}
+                {piece}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {cover && (
+          <div class="relative aspect-[16/10] overflow-hidden bg-neutral-300 lg:aspect-[4/3] dark:bg-neutral-700">
+            <Image
+              class="size-full object-cover"
+              src={cover}
+              alt={item.coverAlt}
+              format="avif"
+              widths={[480, 720, 960, 1280]}
+              sizes="(min-width: 1024px) 42vw, 100vw"
+              loading="eager"
+              draggable={false}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 md:py-16 lg:px-8 2xl:max-w-full">
+    <h2 class="text-xs font-semibold tracking-[0.18em] text-neutral-500 uppercase">
+      {page.postsHeading}
+    </h2>
+
+    {summary.count > 0 ? (
+      <ul class="mt-4">
+        {summary.entries.map(entry => (
+          <CardPostRow entry={entry} />
+        ))}
+      </ul>
+    ) : (
+      <div class="mt-6 border border-dashed border-neutral-400/80 px-6 py-14 text-center dark:border-neutral-600">
+        <p class="text-3xl" aria-hidden="true">
+          {summary.definition.emoji}
+        </p>
+        <p class="mt-4 font-serif text-xl text-neutral-800 dark:text-neutral-200">
+          {page.emptyState}
+        </p>
+        <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+          {page.emptyHint}
+        </p>
+      </div>
+    )}
+
+    <a
+      class="mt-10 inline-flex items-center gap-2 text-sm font-semibold text-[#bb5d48] transition hover:gap-3 dark:text-[#ff9b83]"
+      href={localePath(locale, '/categories')}
+    >
+      <Icon name="arrowRight" class="size-4 rotate-180" />
+      {page.backToCategories}
+    </a>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 pb-16 sm:px-6 lg:px-8 2xl:max-w-full">
+    <div class="border-t border-neutral-300/80 pt-8 dark:border-neutral-700">
+      <h2 class="font-serif text-2xl text-neutral-900 dark:text-neutral-100">
+        {page.otherCategories}
+      </h2>
+      <ul class="mt-5 flex flex-wrap gap-2">
+        {siblings.map(sibling => (
+          <li>
+            <a
+              class="inline-flex items-center gap-2 border border-neutral-400/70 px-3 py-2 text-sm text-neutral-700 transition hover:border-[#17231f] hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-[#d7f568] dark:hover:text-white"
+              href={sibling.path}
+              data-astro-prefetch
+            >
+              <span aria-hidden="true">{sibling.definition.emoji}</span>
+              {labels.items[sibling.id].title}
+              <span class="text-xs text-neutral-500">{sibling.count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</MainLayout>

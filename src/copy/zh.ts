@@ -51,6 +51,7 @@ export const zh = {
         services: '项目',
         about: '关于',
         blog: '博客',
+        categories: '分类',
         careers: '近况',
         customers: '朋友',
       },
@@ -390,6 +391,89 @@ export const zh = {
       '通过 XMore Studio 行业专家团队的洞察，随时了解建筑行业的最新趋势和发展。',
     noPosts: '暂无博客文章。请稍后回来查看。',
     noInsights: '暂无洞察。请稍后回来查看。',
+    browseCategories: '按分类浏览',
+  },
+
+  categoriesIndex: {
+    title: '分类',
+    metaDescription:
+      '站内所有文章按主题归类——工具、工艺、读书笔记、旅途、野外随笔与日常。',
+    ogTitle: '分类 | XMore Studio',
+    eyebrow: '索引',
+    heading: '我写下的东西，按主题归位。',
+    subTitle:
+      '标签描述的是单篇文章，分类则是书架：几个我反复回来的主题，每一个都是开始阅读的入口。',
+    stats: {
+      categories: '分类',
+      posts: '文章',
+      reading: '阅读时长',
+      readingValue: (minutes: number) => `${minutes} 分钟`,
+    },
+    mosaicLabel: '带封面的分类',
+    list: {
+      heading: '全部分类',
+      subTitle: '按已写文章数量排序，可以用搜索缩小范围。',
+      filterLabel: '筛选分类',
+      filterPlaceholder: '搜索分类',
+      clearFilter: '清除搜索',
+      noResults: (query: string) => `没有与“${query}”匹配的分类。`,
+    },
+    entryCount: (count: number) => `${count} 篇`,
+    updated: (date: string) => `更新于 ${date}`,
+    emptyCategory: '这里还空着',
+    open: '进入分类',
+    cta: {
+      title: '想按时间顺序读？',
+      body: '博客页面按时间倒序排列全部文章，最新的一篇在最前面。',
+      action: '浏览博客',
+    },
+    items: {
+      tools: {
+        title: '工具与流程',
+        description: '让工作更快一点的工具、配置和小习惯。',
+        coverAlt: '工作台上摊开的工具',
+      },
+      craft: {
+        title: '工艺与安全',
+        description: '怎样把事情做好，以及怎样在不受伤的前提下做好。',
+        coverAlt: '双手正在处理一块木料',
+      },
+      notes: {
+        title: '笔记与阅读',
+        description: '读书笔记、页边批注，以及在忘记之前写下的想法。',
+        coverAlt: '一支钢笔搁在空白纸面上',
+      },
+      journey: {
+        title: '旅途',
+        description: '长长的路、开阔的天，以及值得绕道去看看的地方。',
+        coverAlt: '从高处山脊望见的群山与湖泊',
+      },
+      field: {
+        title: '野外随笔',
+        description: '在户外写下的文字——天气、水流，以及等光来的耐心。',
+        coverAlt: '流过深色火山地貌的河流',
+      },
+      life: {
+        title: '日常',
+        description: '平常的夜晚、小小的仪式，以及一天里最安静的那一段。',
+        coverAlt: '深色桌面上角落里的节日装饰',
+      },
+    },
+  },
+
+  categoryPage: {
+    eyebrow: '分类',
+    breadcrumbHome: '首页',
+    breadcrumbCategories: '分类',
+    ogSection: '分类',
+    postsHeading: '收录的文章',
+    readingTotal: (minutes: number) => `共 ${minutes} 分钟阅读`,
+    updated: (date: string) => `更新于 ${date}`,
+    emptyState: '这个分类下还没有文章。',
+    emptyHint: '书架已经搭好了，文字还在路上。',
+    otherCategories: '继续浏览',
+    backToCategories: '全部分类',
+    readPost: '阅读文章',
   },
 
   productsIndex: {

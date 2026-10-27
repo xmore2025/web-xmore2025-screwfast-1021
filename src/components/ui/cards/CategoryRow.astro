@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '@components/ui/icons/Icon.astro';
+import { formatDate } from '@utils/utils';
+import type { CategorySummary } from '@utils/categories';
+
+/**
+ * One row of the category index. Text-first: a category with cover art gets
+ * a square thumbnail, one without gets no thumbnail at all (rather than an
+ * empty box), so the emoji in the title is the only glyph on screen.
+ *
+ * `data-search` carries the lower-cased text the index's filter matches
+ * against, so the client script never has to walk the DOM for copy.
+ */
+interface Props {
+  summary: CategorySummary;
+}
+
+const { summary } = Astro.props;
+const { copy } = Astro.locals;
+const labels = copy.categoriesIndex;
+const item = labels.items[summary.id];
+const cover = summary.definition.cover;
+
+const searchIndex = [item.title, item.description]
+  .join(' ')
+  .toLocaleLowerCase(summary.locale);
+
+const meta =
+  summary.count > 0
+    ? [
+        labels.entryCount(summary.count),
+        summary.latest
+          ? labels.updated(formatDate(summary.latest, summary.locale))
+          : null,
+        labels.stats.readingValue(summary.readingMinutes),
+      ].filter(Boolean)
+    : [labels.emptyCategory];
+---
+
+<li data-category-row data-search={searchIndex}>
+  <a
+    class="group grid grid-cols-[3.25rem_1fr_auto] items-center gap-4 border-b border-neutral-300/80 py-5 outline-hidden focus-visible:bg-neutral-300/40 sm:grid-cols-[4.5rem_1fr_auto] sm:gap-6 dark:border-neutral-700 dark:focus-visible:bg-neutral-700/40"
+    href={summary.path}
+    data-astro-prefetch
+  >
+    <span
+      class="relative flex aspect-square items-center justify-center overflow-hidden bg-neutral-300/70 dark:bg-neutral-700/70"
+      aria-hidden="true"
+    >
+      {cover ? (
+        <Image
+          class="size-full object-cover transition duration-500 group-hover:scale-105"
+          src={cover}
+          alt=""
+          format="avif"
+          widths={[96, 144, 192]}
+          sizes="72px"
+          loading="lazy"
+          draggable={false}
+        />
+      ) : (
+        <span class="text-xl sm:text-2xl">{summary.definition.emoji}</span>
+      )}
+    </span>
+
+    <span class="min-w-0">
+      <span class="flex items-center gap-2 text-lg font-semibold text-neutral-900 group-hover:text-[#bb5d48] dark:text-neutral-100 dark:group-hover:text-[#ff9b83]">
+        {item.title}
+      </span>
+      <span class="mt-1 block text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+        {item.description}
+      </span>
+      <span class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-neutral-500 dark:text-neutral-500">
+        {meta.map((piece, index) => (
+          <span class="inline-flex items-center gap-2">
+            {index > 0 && (
+              <span
+                class="size-1 rounded-full bg-neutral-400"
+                aria-hidden="true"
+              />
+            )}
+            {piece}
+          </span>
+        ))}
+      </span>
+    </span>
+
+    <Icon
+      name="arrowRight"
+      class="size-5 shrink-0 text-neutral-400 transition group-hover:translate-x-1 group-hover:text-[#bb5d48] dark:group-hover:text-[#ff9b83]"
+    />
+  </a>
+</li>

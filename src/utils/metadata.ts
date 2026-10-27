@@ -30,7 +30,16 @@ export type PageKind =
       author: string;
     }
   | { type: 'Article'; image: string }
-  | { type: 'Product' };
+  | { type: 'Product' }
+  /**
+   * A page that lists other pages (category index, category detail). The
+   * items become a schema.org `ItemList` so search engines can read the
+   * shelf without scraping the markup.
+   */
+  | {
+      type: 'CollectionPage';
+      items: { name: string; url: string }[];
+    };
 
 export interface PageMetadataInput {
   locale: MarketingLocale;
@@ -125,6 +134,30 @@ export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
         name: input.title,
         description,
         brand: { '@type': 'Brand', name: SITE.title },
+      };
+      break;
+    case 'CollectionPage':
+      jsonLd = {
+        '@type': 'CollectionPage',
+        '@id': canonical,
+        url: canonical,
+        name: ogTitle,
+        description,
+        mainEntity: {
+          '@type': 'ItemList',
+          numberOfItems: kind.items.length,
+          itemListElement: kind.items.map((item, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: item.name,
+            url: item.url,
+          })),
+        },
+        isPartOf: {
+          '@type': 'WebSite',
+          url: absoluteUrl(localePath(locale)),
+          name: SITE.title,
+        },
       };
       break;
     default:

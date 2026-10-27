@@ -22,9 +22,17 @@ The implementation of one route for any locale (`src/views/*View.astro`). Its in
 
 A Markdown/MDX document in one of the localised collections (`blog`, `insights`, `products`), stored as `src/content/<collection>/<locale>/<slug>.md`. `src/utils/content.ts` owns the rule that an entry's id is `<locale>/<slug>`, the route each collection is served from, and each collection's default ordering; callers ask it for an entry's locale, slug, path and siblings.
 
+## Category
+
+One shelf of the blog taxonomy. A blog post joins a category by listing the category id in its `categories` frontmatter — `tags` are free-form labels for a single post, `categories` are the curated, translated axes the `/categories/` index is built from. Ids are stable and language-neutral (`@data/category-ids`, validated by `content.config.ts`); emoji, accent colour and cover art live in `@data/categories`; the name, description and cover alt text live in `copy.categoriesIndex.items.<id>`.
+
+## Category Summary
+
+The derived view of one Category in one Marketing Locale: its posts (newest first), count, latest date, total reading time and page path. Built only by `src/utils/categories.ts` (`categorySummaries`, `categorySummary`); views and cards receive a summary and render it rather than filtering entries themselves.
+
 ## Page Metadata
 
-Everything a page's `<head>` needs (title, description, Open Graph, canonical, hreflang alternates, schema.org JSON-LD), derived by `src/utils/metadata.ts` from the five things a page knows about itself: locale, path, title, description and **Page Kind** (`WebPage`, `BlogPosting`, `Article`, `Product`). Rendered by `Meta.astro`.
+Everything a page's `<head>` needs (title, description, Open Graph, canonical, hreflang alternates, schema.org JSON-LD), derived by `src/utils/metadata.ts` from the five things a page knows about itself: locale, path, title, description and **Page Kind** (`WebPage`, `BlogPosting`, `Article`, `Product`, `CollectionPage`). Rendered by `Meta.astro`.
 
 ## Demo Form
 

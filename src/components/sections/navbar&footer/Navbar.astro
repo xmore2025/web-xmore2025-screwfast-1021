@@ -11,10 +11,16 @@ import { localePath } from '@utils/locale';
 const { locale, copy: t } = Astro.locals;
 
 /**
- * 作品集页顶部是深墨绿（#17231f）Hero 大图。导航若沿用浅色毛玻璃，
+ * 有些页面的首屏是深墨绿（#17231f）Hero 大图。导航若沿用浅色毛玻璃，
  * 会像一块浅色条压住大图、Logo 也失去对比。这里按路由切换成深色玻璃。
  */
-const isDarkHeroPage = /^\/(zh\/)?portfolio\/?$/.test(Astro.url.pathname);
+const DARK_HERO_ROUTES = [
+  /^\/(zh\/)?portfolio\/?$/,
+  /^\/(zh\/)?categories\/?$/,
+];
+const isDarkHeroPage = DARK_HERO_ROUTES.some(route =>
+  route.test(Astro.url.pathname)
+);
 ---
 
 {/* Main header component */}

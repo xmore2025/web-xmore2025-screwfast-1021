@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '@components/ui/icons/Icon.astro';
+import type { CollectionEntry } from 'astro:content';
+import { localeOf, pathFor } from '@utils/content';
+import { capitalize, formatDate } from '@utils/utils';
+
+/**
+ * A post as a single row inside a category listing: date and reading time,
+ * title, description, tags. Deliberately lighter than `CardBlog` — a
+ * category page is a shelf, so the reader is scanning titles, not covers.
+ */
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+const { copy } = Astro.locals;
+const locale = localeOf(entry);
+---
+
+<li>
+  <a
+    class="group grid grid-cols-[4.5rem_1fr_auto] items-start gap-4 border-b border-neutral-300/80 py-6 outline-hidden focus-visible:bg-neutral-300/40 sm:grid-cols-[10rem_1fr_auto] sm:gap-6 dark:border-neutral-700 dark:focus-visible:bg-neutral-700/40"
+    href={pathFor(entry)}
+    data-astro-prefetch
+  >
+    <span
+      class="relative block aspect-[4/3] overflow-hidden bg-neutral-300 dark:bg-neutral-700"
+      aria-hidden="true"
+    >
+      <Image
+        class="size-full object-cover transition duration-500 group-hover:scale-105"
+        src={entry.data.cardImage}
+        alt=""
+        format="avif"
+        widths={[96, 160, 240, 320]}
+        sizes="(min-width: 640px) 160px, 72px"
+        loading="lazy"
+        draggable={false}
+      />
+    </span>
+
+    <span class="min-w-0">
+      <span class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold tracking-wide text-[#bb5d48] uppercase dark:text-[#ff9b83]">
+        <time datetime={entry.data.pubDate.toISOString()}>
+          {formatDate(entry.data.pubDate, locale)}
+        </time>
+        <span
+          class="size-1 rounded-full bg-current opacity-50"
+          aria-hidden="true"
+        ></span>
+        <span>{copy.blog.minRead(entry.data.readTime)}</span>
+      </span>
+
+      <span class="mt-2 block font-serif text-xl leading-snug text-neutral-900 group-hover:text-[#bb5d48] sm:text-2xl dark:text-neutral-100 dark:group-hover:text-[#ff9b83]">
+        {entry.data.title}
+      </span>
+
+      <span class="mt-2 block max-w-2xl text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+        {entry.data.description}
+      </span>
+
+      {entry.data.tags && entry.data.tags.length > 0 && (
+        <span class="mt-3 flex flex-wrap gap-2">
+          {entry.data.tags.map(tag => (
+            <span class="border border-neutral-300 px-2 py-0.5 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
+              #{capitalize(tag)}
+            </span>
+          ))}
+        </span>
+      )}
+    </span>
+
+    <Icon
+      name="arrowRight"
+      class="mt-1 size-5 shrink-0 text-neutral-400 transition group-hover:translate-x-1 group-hover:text-[#bb5d48] dark:group-hover:text-[#ff9b83]"
+    />
+  </a>
+</li>

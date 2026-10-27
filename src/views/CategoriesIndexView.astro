@@ -1,0 +1,216 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import CardCategory from '@components/ui/cards/CardCategory.astro';
+import CategoryRow from '@components/ui/cards/CategoryRow.astro';
+import Icon from '@components/ui/icons/Icon.astro';
+import { getCopy } from '@/copy';
+import { categorySummaries, totals } from '@utils/categories';
+import { absoluteUrl } from '@utils/metadata';
+import { localePath, type MarketingLocale } from '@utils/locale';
+
+/**
+ * The category index in one locale.
+ *
+ * Three blocks, each with one job:
+ *   1. hero   — what this page is, plus a mosaic of the categories that have
+ *               cover art (the fastest way into the archive);
+ *   2. list   — every category as a scannable row, filterable in the browser;
+ *   3. cta    — the chronological alternative, for readers who would rather
+ *               read by date than by theme.
+ *
+ * All counting and ordering happens in `@utils/categories`; this view only
+ * lays the result out.
+ */
+interface Props {
+  locale: MarketingLocale;
+}
+
+const { locale } = Astro.props;
+const copy = getCopy(locale);
+const labels = copy.categoriesIndex;
+
+const summaries = await categorySummaries(locale);
+const stats = totals(summaries);
+const covered = summaries
+  .filter(summary => summary.definition.cover)
+  .slice(0, 4);
+
+const statItems = [
+  { label: labels.stats.categories, value: String(stats.categories) },
+  { label: labels.stats.posts, value: String(stats.posts) },
+  {
+    label: labels.stats.reading,
+    value: labels.stats.readingValue(stats.readingMinutes),
+  },
+];
+---
+
+<MainLayout
+  title={labels.title}
+  description={labels.metaDescription}
+  ogTitle={labels.ogTitle}
+  section={labels.title}
+  kind={{
+    type: 'CollectionPage',
+    items: summaries.map(summary => ({
+      name: labels.items[summary.id].title,
+      url: absoluteUrl(summary.path),
+    })),
+  }}
+>
+  <section class="bg-[#17231f] text-white">
+    <div class="mx-auto grid max-w-[85rem] gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-16 lg:px-8 2xl:max-w-full">
+      <div class="min-w-0 max-w-2xl">
+        <p class="inline-flex items-center gap-2 text-sm font-semibold text-[#d7f568]">
+          <span class="size-2 rounded-full bg-[#f17a62]"></span>
+          {labels.eyebrow}
+        </p>
+        <h1 class="mt-6 font-serif text-4xl leading-[1.05] text-balance sm:text-5xl lg:text-6xl">
+          {labels.heading}
+        </h1>
+        <p class="mt-6 max-w-xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
+          {labels.subTitle}
+        </p>
+
+        <dl class="mt-10 grid max-w-lg grid-cols-3 gap-6 border-t border-white/15 pt-6">
+          {statItems.map(item => (
+            <div>
+              <dt class="text-xs text-white/55 sm:text-sm">{item.label}</dt>
+              <dd class="mt-1 font-serif text-2xl text-[#d7f568] sm:text-3xl">
+                {item.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <div class="min-w-0">
+        <h2 class="sr-only">{labels.mosaicLabel}</h2>
+        <div class="grid grid-cols-2 gap-3 sm:gap-4">
+          {covered.map(summary => (
+            <CardCategory summary={summary} variant="hero" as="h3" />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 md:py-20 lg:px-8 2xl:max-w-full">
+    <div class="flex flex-col justify-between gap-6 border-b border-neutral-400/70 pb-6 sm:flex-row sm:items-end dark:border-neutral-600">
+      <div>
+        <h2 class="font-serif text-3xl text-neutral-900 sm:text-4xl dark:text-neutral-100">
+          {labels.list.heading}
+        </h2>
+        <p class="mt-2 max-w-xl text-sm text-neutral-600 dark:text-neutral-400">
+          {labels.list.subTitle}
+        </p>
+      </div>
+
+      <div class="relative w-full sm:w-72">
+        <label class="sr-only" for="category-filter">
+          {labels.list.filterLabel}
+        </label>
+        <input
+          id="category-filter"
+          type="search"
+          autocomplete="off"
+          placeholder={labels.list.filterPlaceholder}
+          class="w-full border border-neutral-400/70 bg-transparent px-4 py-2.5 pe-10 text-sm text-neutral-800 placeholder:text-neutral-500 focus:border-[#17231f] focus:outline-hidden dark:border-neutral-600 dark:text-neutral-100 dark:focus:border-[#d7f568]"
+          data-category-filter
+        />
+        <button
+          type="button"
+          hidden
+          class="absolute end-1 top-1/2 -translate-y-1/2 p-2 text-neutral-500 transition hover:text-neutral-900 dark:hover:text-neutral-100"
+          data-category-clear
+        >
+          <Icon name="close" class="size-4" />
+          <span class="sr-only">{labels.list.clearFilter}</span>
+        </button>
+      </div>
+    </div>
+
+    <ul class="mt-2" data-category-list>
+      {summaries.map(summary => (
+        <CategoryRow summary={summary} />
+      ))}
+    </ul>
+
+    <p
+      class="py-10 text-sm text-neutral-600 dark:text-neutral-400"
+      data-category-empty
+      data-empty-template={labels.list.noResults('__QUERY__')}
+      aria-live="polite"
+      hidden
+    ></p>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 pb-16 sm:px-6 lg:px-8 2xl:max-w-full">
+    <div class="flex flex-col justify-between gap-6 bg-[#17231f] px-6 py-10 text-white sm:flex-row sm:items-center sm:px-10">
+      <div class="max-w-xl">
+        <h2 class="font-serif text-2xl sm:text-3xl">{labels.cta.title}</h2>
+        <p class="mt-3 text-sm leading-6 text-white/70">{labels.cta.body}</p>
+      </div>
+      <a
+        class="inline-flex w-fit items-center gap-2 bg-[#d7f568] px-5 py-3 text-sm font-bold text-[#17231f] transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d7f568]"
+        href={localePath(locale, '/blog')}
+        data-astro-prefetch
+      >
+        {labels.cta.action}
+        <Icon name="arrowRight" class="size-4" />
+      </a>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  /*
+    Client-side category filter. Progressive enhancement: without JS every
+    row is simply visible, which is the correct default state. Matching is a
+    substring test against `data-search`, which the server pre-lower-cased in
+    the page's own locale.
+  */
+  const input = document.querySelector<HTMLInputElement>(
+    '[data-category-filter]'
+  );
+  const rows = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-category-row]')
+  );
+  const empty = document.querySelector<HTMLElement>('[data-category-empty]');
+  const clear = document.querySelector<HTMLButtonElement>(
+    '[data-category-clear]'
+  );
+
+  if (input && rows.length > 0) {
+    const apply = () => {
+      const query = input.value.trim().toLocaleLowerCase();
+      let visible = 0;
+
+      for (const row of rows) {
+        const matches = !query || (row.dataset.search ?? '').includes(query);
+        row.hidden = !matches;
+        if (matches) visible += 1;
+      }
+
+      if (empty) {
+        empty.hidden = visible > 0;
+        empty.textContent = (empty.dataset.emptyTemplate ?? '').replace(
+          '__QUERY__',
+          input.value.trim()
+        );
+      }
+
+      if (clear) clear.hidden = query.length === 0;
+    };
+
+    input.addEventListener('input', apply);
+
+    clear?.addEventListener('click', () => {
+      input.value = '';
+      input.focus();
+      apply();
+    });
+
+    apply();
+  }
+</script>

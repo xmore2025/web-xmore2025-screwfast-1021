@@ -1,6 +1,7 @@
 import faqs from '@data/faqs.json';
 import features from '@data/features.json';
 import pricing from '@data/pricing.json';
+import type { CategoryId } from '@data/categories';
 
 /**
  * English copy table. This file defines the shape every other locale must
@@ -56,6 +57,7 @@ export const en = {
         services: 'Projects',
         about: 'About',
         blog: 'Blog',
+        categories: 'Categories',
         careers: 'Now',
         customers: 'Friends',
       },
@@ -427,6 +429,100 @@ export const en = {
       "Stay up-to-date with the latest trends and developments in the construction industry with insights from XMore Studio's team of industry experts. ",
     noPosts: 'No blog posts yet. Check back soon.',
     noInsights: 'No insights yet. Check back soon.',
+    browseCategories: 'Browse by category',
+  },
+
+  categoriesIndex: {
+    title: 'Categories',
+    metaDescription:
+      'Every note on this site, sorted by theme — tools, craft, reading notes, journeys, field essays and quiet life.',
+    ogTitle: 'Categories | XMore Studio',
+    eyebrow: 'The index',
+    heading: 'Everything I write, sorted by theme.',
+    subTitle:
+      'Tags describe a single post. Categories are the shelves: a handful of themes I keep returning to, each one a place to start reading.',
+    stats: {
+      categories: 'Categories',
+      posts: 'Posts',
+      reading: 'Reading time',
+      readingValue: (minutes: number) => `${minutes} min`,
+    },
+    mosaicLabel: 'Categories with a cover',
+    list: {
+      heading: 'All categories',
+      subTitle:
+        'Ordered by how much has been written. Filter to narrow the list.',
+      filterLabel: 'Filter categories',
+      filterPlaceholder: 'Search a category',
+      clearFilter: 'Clear search',
+      noResults: (query: string) => `No category matches “${query}”.`,
+    },
+    entryCount: (count: number) => (count === 1 ? '1 post' : `${count} posts`),
+    updated: (date: string) => `Updated ${date}`,
+    emptyCategory: 'Nothing filed here yet',
+    open: 'Open category',
+    cta: {
+      title: 'Looking for the newest writing?',
+      body: 'The blog lists every post in reverse order, with the latest first.',
+      action: 'Browse the blog',
+    },
+    /** Names, descriptions and cover alt text, keyed by category id. */
+    items: {
+      tools: {
+        title: 'Tools & Workflow',
+        description:
+          'The instruments, setups and small routines that make the work go faster.',
+        coverAlt: 'Tools laid out on a workbench',
+      },
+      craft: {
+        title: 'Craft & Safety',
+        description:
+          'How things are made well, and how they are made without anyone getting hurt.',
+        coverAlt: 'Hands working on a piece of timber',
+      },
+      notes: {
+        title: 'Notes & Reading',
+        description:
+          'Reading notes, marginalia, and ideas written down before they disappear.',
+        coverAlt: 'A fountain pen resting on blank paper',
+      },
+      journey: {
+        title: 'Journeys',
+        description:
+          'Long roads, wide skies, and the places that were worth the detour.',
+        coverAlt: 'Mountains and a lake seen from a high ridge',
+      },
+      field: {
+        title: 'Field Notes',
+        description:
+          'Essays written outdoors — weather, water, and the patience it takes to wait for light.',
+        coverAlt: 'A river running through a dark volcanic landscape',
+      },
+      life: {
+        title: 'Quiet Life',
+        description:
+          'Ordinary evenings, small rituals, and the quietest part of the day.',
+        coverAlt: 'A dark table with festive decorations in the corner',
+      },
+    } satisfies Record<
+      CategoryId,
+      { title: string; description: string; coverAlt: string }
+    >,
+  },
+
+  categoryPage: {
+    eyebrow: 'Category',
+    breadcrumbHome: 'Home',
+    breadcrumbCategories: 'Categories',
+    ogSection: 'Categories',
+    postsHeading: 'Filed here',
+    readingTotal: (minutes: number) => `${minutes} min of reading`,
+    updated: (date: string) => `Updated ${date}`,
+    emptyState: 'Nothing filed under this category yet.',
+    emptyHint: 'The shelf exists — the writing is still on its way.',
+    otherCategories: 'Keep browsing',
+    backToCategories: 'All categories',
+    readPost: 'Read post',
   },
 
   productsIndex: {

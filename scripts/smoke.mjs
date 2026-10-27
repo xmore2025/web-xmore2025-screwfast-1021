@@ -16,6 +16,8 @@ const MARKETING_ROUTES = [
   '/services/',
   '/blog/',
   '/blog/post-1/',
+  '/categories/',
+  '/categories/notes/',
   '/insights/insight-1/',
   '/contact/',
 ];
@@ -45,6 +47,10 @@ const EXPECTATIONS = {
   '/zh/contact/': ['data-demo-form', 'data-demo-status'],
   '/blog/post-1/': ['"@type":"BlogPosting"'],
   '/zh/blog/post-1/': ['"inLanguage":"zh-CN"'],
+  '/categories/': ['"@type":"CollectionPage"', 'data-category-row'],
+  '/zh/categories/': ['"@type":"CollectionPage"', 'data-category-row'],
+  '/categories/notes/': ['"@type":"ItemList"'],
+  '/zh/categories/notes/': ['"inLanguage":"zh-CN"'],
 };
 
 const MIME = {

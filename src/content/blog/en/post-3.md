@@ -10,6 +10,7 @@ cardImage: '@/images/blog/post-3.avif'
 cardImageAlt: 'Side view worker wearing gloves'
 readTime: 3
 tags: ['procurement', 'affordable', 'efficiency']
+categories: ['tools']
 ---
 
 Managing a construction project can be overwhelming, especially when it comes to procurement. That's why XMore Studio is committed to simplifying the process and keeping your projects within budget.

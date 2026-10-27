@@ -1,0 +1,10 @@
+---
+import CategoryDetailView from '@views/CategoryDetailView.astro';
+import { categoryStaticPaths } from '@utils/categories';
+
+export const getStaticPaths = () => categoryStaticPaths('en');
+
+const { summary } = Astro.props;
+---
+
+<CategoryDetailView summary={summary} />
