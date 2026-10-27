@@ -9,25 +9,52 @@ import { Image } from 'astro:assets';
 import { render, type CollectionEntry } from 'astro:content';
 import { capitalize, formatDate } from '@utils/utils';
 import { entriesFor, localeOf } from '@utils/content';
+import { categoriesOf, categoryPath } from '@utils/categories';
+import { categoryById } from '@data/categories';
+import { localePath } from '@utils/locale';
 import { getCopy } from '@/copy';
 
-/** One blog post. The locale is the entry's own. */
+/**
+ * One blog post. The locale is the entry's own.
+ *
+ * The page is as wide as the portfolio and category pages (the 85rem
+ * container), but the text keeps a readable measure:
+ *
+ *   - the header (meta line, serif title, standfirst, byline) and the prose
+ *     share the same `READING_MEASURE` cap, so they line up;
+ *   - the cover art spans the full container, which is what makes the page
+ *     read as wide instead of as a narrow strip in the middle;
+ *   - the measure grows with the viewport up to 50rem (~75 characters at
+ *     18px), so widening the page never stretches the line length past
+ *     what is comfortable to read.
+ */
 interface Props {
   post: CollectionEntry<'blog'>;
 }
+
+/**
+ * Shared by the header block and the prose column; keep them identical or
+ * the title stops lining up with the first paragraph.
+ */
+const READING_MEASURE = 'max-w-[46rem] lg:max-w-[48rem] xl:max-w-[50rem]';
 
 const { post } = Astro.props;
 const locale = localeOf(post);
 const t = getCopy(locale);
 const { Content } = await render(post);
 
-// Related posts: every other post in this locale.
-// Note: This is a very basic way of choosing related posts, just for the purpose of the example.
-// In a production site, you might want to implement a more robust algorithm, choosing related posts based on tags, categories, dates, authors, or keywords.
-// See example: https://blog.codybrunner.com/2024/adding-related-articles-with-astro-content-collections/
+/** Related posts: every other post in this locale, newest first. */
 const relatedPosts = (await entriesFor('blog', locale)).filter(
   blogEntry => blogEntry.id !== post.id
 );
+
+/** Categories this post is filed under, ready to render as links. */
+const postCategories = categoriesOf(post).map(id => ({
+  id,
+  title: t.categoriesIndex.items[id].title,
+  emoji: categoryById(id)?.emoji ?? '',
+  path: categoryPath(locale, id),
+}));
 ---
 
 <MainLayout
@@ -41,84 +68,144 @@ const relatedPosts = (await entriesFor('blog', locale)).filter(
     author: post.data.author,
   }}
 >
-  <section class="mx-auto max-w-3xl px-4 pt-6 pb-12 sm:px-6 lg:px-8 lg:pt-10">
-    <div class="max-w-2xl">
-      <div class="mb-6 flex items-center justify-between">
-        <div class="flex w-full gap-x-5 sm:items-center sm:gap-x-3">
-          <AvatarBlogLarge blogEntry={post} />
-          <div class="grow">
-            <div class="flex items-center justify-between gap-x-2">
-              <div>
-                {/* Post metadata and author info */}
-                <span class="font-bold text-neutral-700 dark:text-neutral-300">
-                  {post.data.author}
-                </span>
-                <ul class="text-xs text-neutral-500">
-                  <li class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600">
-                    {formatDate(post.data.pubDate, locale)}
-                  </li>
-                  <li class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600">
-                    {t.blog.minRead(post.data.readTime)}
-                  </li>
-                </ul>
-              </div>
+  <section class="mx-auto max-w-[85rem] px-4 pt-6 sm:px-6 lg:px-8 lg:pt-10 2xl:max-w-full">
+    <div class:list={['mx-auto', READING_MEASURE]}>
+      <nav aria-label="Breadcrumb" class="text-xs text-neutral-500">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li>
+            <a
+              class="transition hover:text-[#bb5d48] dark:hover:text-[#ff9b83]"
+              href={localePath(locale)}
+            >
+              {t.blog.breadcrumbHome}
+            </a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <a
+              class="transition hover:text-[#bb5d48] dark:hover:text-[#ff9b83]"
+              href={localePath(locale, '/blog')}
+            >
+              {t.blog.breadcrumbBlog}
+            </a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li
+            class="max-w-[14rem] truncate text-neutral-700 sm:max-w-md dark:text-neutral-300"
+            aria-current="page"
+          >
+            {post.data.title}
+          </li>
+        </ol>
+      </nav>
+
+      <p class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold tracking-[0.16em] text-[#bb5d48] uppercase lg:mt-12 dark:text-[#ff9b83]">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {formatDate(post.data.pubDate, locale)}
+        </time>
+        <span
+          class="size-1 rounded-full bg-current opacity-50"
+          aria-hidden="true"
+        ></span>
+        <span>{t.blog.minRead(post.data.readTime)}</span>
+      </p>
+
+      <h1 class="mt-5 font-serif text-3xl leading-[1.12] text-balance text-neutral-900 sm:text-4xl lg:text-5xl xl:text-6xl dark:text-neutral-100">
+        {post.data.title}
+      </h1>
+
+      <p class="mt-5 text-base text-pretty text-neutral-600 sm:text-lg sm:leading-8 dark:text-neutral-400">
+        {post.data.description}
+      </p>
+
+      <div class="mt-8 flex items-center gap-3 sm:gap-4">
+        <AvatarBlogLarge blogEntry={post} />
+        <div>
+          <p class="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+            {post.data.author}
+          </p>
+          {post.data.role && (
+            <p class="mt-0.5 text-xs text-neutral-500">{post.data.role}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto mt-10 max-w-[85rem] px-4 sm:px-6 lg:mt-14 lg:px-8 2xl:max-w-full">
+    <Image
+      class="aspect-[4/3] w-full object-cover sm:aspect-[16/9] lg:aspect-[21/9]"
+      src={post.data.cardImage}
+      alt={post.data.cardImageAlt}
+      format="avif"
+      widths={[480, 768, 1000, 1200]}
+      sizes="(min-width: 1360px) 1360px, 100vw"
+      loading="eager"
+      draggable={false}
+    />
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:py-16 2xl:max-w-full">
+    <div class:list={['mx-auto', READING_MEASURE]}>
+      <article class="prose prose-base prose-neutral sm:prose-lg dark:prose-invert max-w-none text-pretty prose-headings:font-serif prose-headings:font-normal prose-headings:tracking-tight prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-2xl sm:prose-h2:text-3xl prose-p:leading-7 sm:prose-p:leading-8 prose-a:text-[#bb5d48] prose-a:underline-offset-4 dark:prose-headings:text-neutral-100 dark:prose-a:text-[#ff9b83] prose-blockquote:border-s-2 prose-blockquote:border-[#d7f568] prose-blockquote:ps-5 prose-blockquote:not-italic prose-blockquote:text-neutral-600 dark:prose-blockquote:text-neutral-400 prose-li:leading-7 sm:prose-li:leading-8">
+        <Content />
+      </article>
+
+      <div class="mt-12 border-t border-neutral-300/80 pt-8 dark:border-neutral-700">
+        {postCategories.length > 0 && (
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="me-1 text-xs font-semibold tracking-[0.16em] text-neutral-500 uppercase">
+              {t.blog.filedUnder}
+            </span>
+            {postCategories.map(category => (
+              <a
+                class="inline-flex items-center gap-1.5 border border-neutral-400/70 px-2.5 py-1 text-xs text-neutral-700 transition hover:border-[#17231f] hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-[#d7f568] dark:hover:text-white"
+                href={category.path}
+                data-astro-prefetch
+              >
+                <span aria-hidden="true">{category.emoji}</span>
+                {category.title}
+              </a>
+            ))}
+          </div>
+        )}
+
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap gap-2">
+            {post.data.tags?.map((tag: string) => (
+              <span class="border border-neutral-300 px-2 py-0.5 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
+                #{capitalize(tag)}
+              </span>
+            ))}
+          </div>
+          <div class="flex items-center gap-1.5">
+            <Bookmark />
+            <div class="mx-2 h-4 border-e border-neutral-400 dark:border-neutral-500"></div>
+            <div class="inline-flex">
+              <SocialShare pageTitle={post.data.title} />
             </div>
           </div>
         </div>
       </div>
-      {/* Blog post title */}
-      <h2 class="mb-3 text-2xl font-bold text-neutral-800 md:text-3xl dark:text-neutral-200">
-        {post.data.title}
-      </h2>
-      <Image
-        class="mb-5 w-full rounded-xl object-cover md:mb-8"
-        src={post.data.cardImage}
-        alt={post.data.cardImageAlt}
-        draggable={'false'}
-        format={'avif'}
+
+      <PostFeedback
+        title={t.blog.wasHelpful}
+        firstChoice={t.blog.yes}
+        secondChoice={t.blog.no}
       />
-      {/* Blog post contents */}
-      <article class="prose prose-lg prose-neutral dark:prose-invert mb-5 max-w-none text-pretty md:mb-8">
-        <Content />
-      </article>
-      <div class="mx-auto grid max-w-(--breakpoint-lg) gap-y-5 sm:flex sm:items-center sm:justify-between sm:gap-y-0">
-        {/* Blog post tags */}
-        <div class="flex flex-wrap gap-x-2 gap-y-1 sm:flex-nowrap sm:items-center sm:gap-y-0">
-          {post.data.tags?.map((tag: string) => (
-            <span class="inline-flex items-center gap-x-1.5 rounded-lg bg-neutral-400/30 px-3 py-1.5 text-xs font-medium text-neutral-700 outline-hidden focus:outline-hidden focus-visible:ring-3 focus-visible:outline-hidden dark:bg-neutral-700/60 dark:text-neutral-300">
-              {capitalize(tag)}
-            </span>
-          ))}
-        </div>
-        {/* Bookmark and Share buttons */}
-        <div class="flex items-center justify-end gap-x-1.5">
-          <Bookmark />
-          <div class="mx-3 block h-4 border-e border-neutral-400 dark:border-neutral-500"></div>
-          <div class="inline-flex">
-            <SocialShare pageTitle={post.data.title} />
-          </div>
-        </div>
-      </div>
     </div>
-    <PostFeedback
-      title={t.blog.wasHelpful}
-      firstChoice={t.blog.yes}
-      secondChoice={t.blog.no}
-    />
   </section>
 
-  {/* Related articles section */}
-  <section class="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-    <div class="mb-10 max-w-2xl">
-      <h2 class="text-2xl font-bold text-balance text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200">
+  <section class="mx-auto max-w-[85rem] px-4 pb-16 sm:px-6 lg:px-8 2xl:max-w-full">
+    <div class="border-t border-neutral-300/80 pt-10 dark:border-neutral-700">
+      <h2 class="font-serif text-2xl text-neutral-900 sm:text-3xl dark:text-neutral-100">
         {t.blog.relatedArticles}
       </h2>
-    </div>
-
-    <div class="grid grid-cols-2 gap-6">
-      {relatedPosts.map(entry => (
-        <CardRelated blogEntry={entry} />
-      ))}
+      <div class="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {relatedPosts.map(entry => (
+          <CardRelated blogEntry={entry} />
+        ))}
+      </div>
     </div>
   </section>
 </MainLayout>

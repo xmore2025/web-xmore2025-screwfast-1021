@@ -157,6 +157,9 @@ export const zh = {
     yes: '是',
     no: '否',
     ogSection: '博客',
+    breadcrumbHome: '首页',
+    breadcrumbBlog: '博客',
+    filedUnder: '归入分类',
   },
 
   insights: {

@@ -175,6 +175,11 @@ export const en = {
     yes: 'Yes',
     no: 'No',
     ogSection: 'Blog',
+    /** Breadcrumb trail above a post. */
+    breadcrumbHome: 'Home',
+    breadcrumbBlog: 'Blog',
+    /** Label for the post's category links. */
+    filedUnder: 'Filed under',
   },
 
   insights: {

@@ -1,37 +1,42 @@
 ---
-// Import necessary modules and utilities
 import { Image } from 'astro:assets';
 import { formatDate } from '@utils/utils';
 import { localeOf, pathFor } from '@utils/content';
 import type { CollectionEntry } from 'astro:content';
 
-const { blogEntry } = Astro.props;
-
+/**
+ * A related post in the "Related articles" strip: square cover, serif title,
+ * date. Matches the editorial style of the post page itself — no rounding
+ * and no card chrome, so a row of three reads as a shelf, not as three
+ * widgets.
+ */
 interface Props {
   blogEntry: CollectionEntry<'blog'>;
 }
+
+const { blogEntry } = Astro.props;
 ---
 
 <a
-  class="group block rounded-xl ring-zinc-500 outline-hidden transition duration-300 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden"
+  class="group block outline-hidden focus-visible:bg-neutral-300/40 dark:focus-visible:bg-neutral-700/40"
   href={pathFor(blogEntry)}
   data-astro-prefetch
 >
-  <div>
+  <div class="relative aspect-[4/3] overflow-hidden bg-neutral-300 dark:bg-neutral-700">
     <Image
-      class="aspect-video rounded-xl"
+      class="size-full object-cover transition duration-500 group-hover:scale-105"
       src={blogEntry.data.cardImage}
       alt={blogEntry.data.cardImageAlt}
       draggable={'false'}
       format={'avif'}
+      widths={[320, 480, 720]}
+      sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
     />
-    {/* The title of the blog post */}
-    <h3 class="mt-2 text-lg font-medium text-balance text-neutral-800 group-hover:text-orange-400 dark:text-neutral-300 dark:group-hover:text-neutral-50">
-      {blogEntry.data.title}
-    </h3>
-    {/* The formatted publication date of the blog post */}
-    <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-      {formatDate(blogEntry.data.pubDate, localeOf(blogEntry))}
-    </p>
   </div>
+  <p class="mt-4 text-xs font-semibold tracking-[0.16em] text-[#bb5d48] uppercase dark:text-[#ff9b83]">
+    {formatDate(blogEntry.data.pubDate, localeOf(blogEntry))}
+  </p>
+  <h3 class="mt-2 font-serif text-lg leading-snug text-balance text-neutral-900 group-hover:text-[#bb5d48] sm:text-xl dark:text-neutral-100 dark:group-hover:text-[#ff9b83]">
+    {blogEntry.data.title}
+  </h3>
 </a>

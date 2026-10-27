@@ -45,6 +45,11 @@ export function categoriesOf(entry: CollectionEntry<'blog'>): CategoryId[] {
   return (entry.data.categories ?? []).filter(isCategoryId);
 }
 
+/** Site-relative path of a category page, e.g. `/zh/categories/notes/`. */
+export function categoryPath(locale: MarketingLocale, id: CategoryId): string {
+  return `${localePath(locale, '/categories')}/${id}/`;
+}
+
 function summarise(
   definition: CategoryDefinition,
   locale: MarketingLocale,
@@ -66,7 +71,7 @@ function summarise(
       (total, entry) => total + entry.data.readTime,
       0
     ),
-    path: `${localePath(locale, '/categories')}/${definition.id}/`,
+    path: categoryPath(locale, definition.id),
   };
 }
 
