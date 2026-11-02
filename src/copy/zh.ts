@@ -168,6 +168,41 @@ export const zh = {
     ogSection: '洞察',
   },
 
+  /** 摄影集合层文案：按语言无关的 frontmatter id 组织的分类名，以及单张照片页所需文案。 */
+  photography: {
+    ogSection: '摄影',
+    breadcrumbHome: '首页',
+    breadcrumbPhotography: '摄影',
+    categories: {
+      street: '街头',
+      portrait: '人像',
+      landscape: '风景',
+      abstract: '抽象',
+      experiment: '实验',
+    },
+    shotOn: '拍摄于',
+    location: '地点',
+    camera: '器材',
+    morePhotos: '档案中的其他照片',
+    backToArchive: '返回摄影档案',
+  },
+
+  /** 实验集合层文案；列表页文案在 `experimentsIndex`。 */
+  experiments: {
+    ogSection: '实验',
+    breadcrumbHome: '首页',
+    breadcrumbExperiments: '实验',
+    statuses: {
+      idea: '想法',
+      'in-progress': '进行中',
+      done: '已完成',
+      archived: '已归档',
+    },
+    statusLabel: '状态',
+    moreExperiments: '更多实验',
+    backToArchive: '返回实验列表',
+  },
+
   products: {
     ogSection: '五金工具',
     tabs: '选项卡',

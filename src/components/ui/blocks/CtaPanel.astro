@@ -1,0 +1,33 @@
+---
+import Icon from '@components/ui/icons/Icon.astro';
+
+/**
+ * The dark closing panel: one line of copy and one way onward. Used at the
+ * foot of the category index and of each archive detail page, so "what next"
+ * looks the same wherever a reader runs out of page.
+ */
+interface Props {
+  title: string;
+  body?: string;
+  action: { label: string; href: string };
+}
+
+const { title, body, action } = Astro.props;
+---
+
+<section class="mx-auto max-w-[85rem] px-4 pb-16 sm:px-6 lg:px-8 2xl:max-w-full">
+  <div class="flex flex-col justify-between gap-6 bg-brand-ink px-6 py-10 text-white sm:flex-row sm:items-center sm:px-10">
+    <div class="max-w-xl">
+      <h2 class="font-serif text-2xl sm:text-3xl">{title}</h2>
+      {body && <p class="mt-3 text-sm leading-6 text-white/70">{body}</p>}
+    </div>
+    <a
+      class="inline-flex w-fit items-center gap-2 bg-brand-citrus px-5 py-3 text-sm font-bold text-brand-ink transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-citrus"
+      href={action.href}
+      data-astro-prefetch
+    >
+      {action.label}
+      <Icon name="arrowRight" class="size-4" />
+    </a>
+  </div>
+</section>

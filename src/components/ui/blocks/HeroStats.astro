@@ -1,0 +1,23 @@
+---
+/**
+ * The row of numbers under a `DarkHero` headline (photo count, experiment
+ * count, category totals). A flex row rather than a fixed grid so it reads
+ * the same with two items as with three.
+ */
+interface Props {
+  items: { label: string; value: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<dl class="mt-10 flex flex-wrap gap-x-10 gap-y-6 border-t border-white/15 pt-6">
+  {items.map(item => (
+    <div>
+      <dt class="text-xs text-white/55 sm:text-sm">{item.label}</dt>
+      <dd class="mt-1 font-serif text-2xl text-brand-citrus sm:text-3xl">
+        {item.value}
+      </dd>
+    </div>
+  ))}
+</dl>

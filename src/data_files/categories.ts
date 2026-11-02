@@ -39,13 +39,38 @@ export interface CategoryDefinition {
  * Editorial order. The index re-sorts by activity, so this only decides
  * tie-breaks between categories with the same number of posts.
  */
+/*
+  Accents name the brand tokens in `global.css` rather than repeating the hex,
+  so the palette still has exactly one definition. They are used as an inline
+  style (`background-color`), which is why they are `var(…)` and not a class.
+*/
 export const CATEGORIES: readonly CategoryDefinition[] = [
-  { id: 'tools', emoji: '🛠️', accent: '#d7f568' },
-  { id: 'craft', emoji: '🧱', accent: '#f17a62' },
-  { id: 'notes', emoji: '📝', accent: '#d7f568', cover: notesCover },
-  { id: 'journey', emoji: '🏔️', accent: '#9fb8a8', cover: journeyCover },
-  { id: 'field', emoji: '🌊', accent: '#9fb8a8', cover: fieldCover },
-  { id: 'life', emoji: '☕', accent: '#f17a62', cover: lifeCover },
+  { id: 'tools', emoji: '🛠️', accent: 'var(--color-brand-citrus)' },
+  { id: 'craft', emoji: '🧱', accent: 'var(--color-brand-clay)' },
+  {
+    id: 'notes',
+    emoji: '📝',
+    accent: 'var(--color-brand-citrus)',
+    cover: notesCover,
+  },
+  {
+    id: 'journey',
+    emoji: '🏔️',
+    accent: 'var(--color-brand-sage)',
+    cover: journeyCover,
+  },
+  {
+    id: 'field',
+    emoji: '🌊',
+    accent: 'var(--color-brand-sage)',
+    cover: fieldCover,
+  },
+  {
+    id: 'life',
+    emoji: '☕',
+    accent: 'var(--color-brand-clay)',
+    cover: lifeCover,
+  },
 ];
 
 export function categoryById(id: CategoryId): CategoryDefinition | undefined {

@@ -1,0 +1,24 @@
+---
+/**
+ * What an archive shows when it has nothing to show yet.
+ *
+ * Lives here so every collection page can say "nothing here yet" with the
+ * same measure and the same colour.
+ */
+interface Props {
+  message: string;
+  /** Extra vertical breathing room when the block stands in for a whole grid. */
+  spacious?: boolean;
+}
+
+const { message, spacious = false } = Astro.props;
+---
+
+<p
+  class:list={[
+    'text-pretty text-neutral-600 dark:text-neutral-400',
+    spacious ? 'py-12' : 'py-4',
+  ]}
+>
+  {message}
+</p>

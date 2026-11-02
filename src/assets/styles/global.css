@@ -18,6 +18,19 @@
   --color-black: #000;
   --color-white: #fff;
 
+  /*
+    XMore brand palette. Every deep-ink section, citrus accent and terracotta
+    detail in the site resolves to one of these tokens, so the palette is
+    edited in one place instead of across forty arbitrary hex literals.
+  */
+  --color-brand-ink: #17231f; /* deep ink green — dark section background */
+  --color-brand-citrus: #d7f568; /* primary accent — highlights and CTAs */
+  --color-brand-clay: #f17a62; /* secondary accent — status dots and tags */
+  --color-brand-rust: #bb5d48; /* muted accent — light-mode emphasis */
+  --color-brand-blush: #ff9b83; /* muted accent — dark-mode emphasis */
+  --color-brand-moss: #263a32; /* raised surface on top of ink */
+  --color-brand-sage: #9fb8a8; /* cool accent for the outdoors categories */
+
   --color-gray-50: oklch(0.985 0.002 247.839);
   --color-gray-100: oklch(0.967 0.003 264.542);
   --color-gray-200: oklch(0.928 0.006 264.531);

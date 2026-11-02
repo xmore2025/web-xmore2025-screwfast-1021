@@ -6,6 +6,8 @@ import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
 import { CATEGORY_IDS } from './data_files/category-ids';
+import { PHOTO_CATEGORY_IDS } from './data_files/photo-categories';
+import { EXPERIMENT_STATUS_IDS } from './data_files/experiment-statuses';
 
 const productsCollection = defineCollection({
   loader: glob({
@@ -123,9 +125,8 @@ const photographyCollection = defineCollection({
       cardImageAlt: z.string(),
       location: z.string().optional(),
       shootDate: z.date().optional(),
-      category: z
-        .enum(['street', 'portrait', 'landscape', 'abstract', 'experiment'])
-        .optional(),
+      /** Shelf of the photography archive; labels live in the copy tables. */
+      category: z.enum(PHOTO_CATEGORY_IDS).optional(),
       camera: z.string().optional(),
     }),
 });
@@ -143,7 +144,8 @@ const experimentsCollection = defineCollection({
       cardImageAlt: z.string(),
       tags: z.array(z.string()).optional(),
       experimentDate: z.date().optional(),
-      status: z.enum(['idea', 'in-progress', 'done', 'archived']).optional(),
+      /** How far the experiment got; labels live in the copy tables. */
+      status: z.enum(EXPERIMENT_STATUS_IDS).optional(),
     }),
 });
 

@@ -16,6 +16,10 @@ export const OG = {
   image: ogImageSrc,
 };
 
+/** Where the source lives; linked from the banner and the closing CTA. */
+export const REPO_URL =
+  'https://github.com/xmore2025/web-xmore2025-screwfast-1021';
+
 export const partnersData = [
   {
     icon: `<svg class="mx-auto h-auto w-24 py-3 sm:mx-0 lg:w-32 lg:py-5" viewBox="0 0 120 40" fill="none"><text x="10" y="28" fill="#6B7280" font-size="18" font-family="sans-serif">Partner 1</text></svg>`,

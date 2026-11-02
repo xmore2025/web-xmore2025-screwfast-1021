@@ -1,0 +1,45 @@
+---
+import Icon from '@components/ui/icons/Icon.astro';
+
+/**
+ * The block an archive page opens with: one heading, one standfirst and an
+ * optional link out.
+ *
+ * Photography, experiments, the blog and the insights index all used to carry
+ * their own near-identical copy of this; they share it now, so a change to
+ * the rhythm of an archive page is one edit instead of four.
+ */
+interface Props {
+  heading: string;
+  subTitle: string;
+  /** Optional link under the standfirst, e.g. "Browse categories". */
+  action?: { label: string; href: string };
+  /** `h1` on a page's own header, `h2` when it introduces a sub-section. */
+  as?: 'h1' | 'h2';
+}
+
+const { heading, subTitle, action, as: Tag = 'h1' } = Astro.props;
+---
+
+<section class="mx-auto max-w-[85rem] space-y-8 px-4 pt-16 sm:px-6 lg:px-8 2xl:max-w-full">
+  <div class="mx-auto max-w-3xl text-left sm:text-center">
+    <Tag class="block text-4xl font-bold tracking-tight text-balance text-neutral-800 md:text-5xl lg:text-6xl dark:text-neutral-200">
+      {heading}
+    </Tag>
+
+    <p class="mt-4 text-lg text-pretty text-neutral-600 dark:text-neutral-400">
+      {subTitle}
+    </p>
+
+    {action && (
+      <a
+        class="mt-6 inline-flex items-center gap-2 border border-neutral-400/70 px-4 py-2 text-sm font-semibold text-neutral-700 transition hover:border-brand-ink hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-brand-citrus dark:hover:text-white"
+        href={action.href}
+        data-astro-prefetch
+      >
+        {action.label}
+        <Icon name="arrowRight" class="size-4" />
+      </a>
+    )}
+  </div>
+</section>

@@ -20,7 +20,7 @@ The implementation of one route for any locale (`src/views/*View.astro`). Its in
 
 ## Content Entry
 
-A Markdown/MDX document in one of the localised collections (`blog`, `insights`, `products`), stored as `src/content/<collection>/<locale>/<slug>.md`. `src/utils/content.ts` owns the rule that an entry's id is `<locale>/<slug>`, the route each collection is served from, and each collection's default ordering; callers ask it for an entry's locale, slug, path and siblings.
+A Markdown/MDX document in one of the localised collections (`blog`, `insights`, `products`, `photography`, `experiments`), stored as `src/content/<collection>/<locale>/<slug>.md`. `src/utils/content.ts` owns the rule that an entry's id is `<locale>/<slug>`, the route each collection is served from, and each collection's default ordering; callers ask it for an entry's locale, slug, path and siblings. Every collection has both an index route (`/<collection>/`) and a detail route (`/<collection>/[id]/`); a collection without both produces dead links, so they are added together.
 
 ## Category
 
@@ -37,6 +37,10 @@ Everything a page's `<head>` needs (title, description, Open Graph, canonical, h
 ## Demo Form
 
 A placeholder form in the template (contact, newsletter, sign-in/up/recover) that is not wired to a backend. `DemoForm.astro` owns the behaviour: it intercepts submit, validates, shows a locale-specific success message and resets.
+
+## Brand Palette
+
+The site's colours, defined once as `--color-brand-*` tokens in `@theme` in `src/assets/styles/global.css` (`ink`, `citrus`, `clay`, `rust`, `blush`, `moss`, `sage`). Components use the generated utilities (`bg-brand-ink`, `text-brand-citrus`); raw CSS and inline styles use `var(--color-brand-…)`. No file carries a brand hex literal.
 
 ## Icon
 

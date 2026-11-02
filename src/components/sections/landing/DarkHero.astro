@@ -1,0 +1,47 @@
+---
+/**
+ * The deep-ink hero: eyebrow, serif headline, standfirst, then whatever the
+ * page wants to put beside it.
+ *
+ * The portfolio and the category index both open on one of these; they used
+ * to build it twice with slightly different grid ratios and headline sizes,
+ * which is why the two pages did not line up. One component, one rhythm:
+ *
+ *   - `actions` — buttons or a line of context under the standfirst;
+ *   - `stats`   — a `<HeroStats>` row of numbers;
+ *   - `visual`  — the right-hand image or mosaic.
+ */
+interface Props {
+  eyebrow: string;
+  heading: string;
+  subTitle: string;
+}
+
+const { eyebrow, heading, subTitle } = Astro.props;
+---
+
+<section class="bg-brand-ink text-white">
+  <div class="mx-auto grid max-w-[85rem] gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 lg:px-8 lg:py-24 2xl:max-w-full">
+    <div class="min-w-0 max-w-2xl">
+      <p class="inline-flex items-center gap-2 text-sm font-semibold text-brand-citrus">
+        <span class="size-2 rounded-full bg-brand-clay"></span>
+        {eyebrow}
+      </p>
+
+      <h1 class="mt-6 font-serif text-4xl leading-[1.05] text-balance sm:text-5xl lg:text-6xl">
+        {heading}
+      </h1>
+
+      <p class="mt-6 max-w-xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
+        {subTitle}
+      </p>
+
+      <slot name="actions" />
+      <slot name="stats" />
+    </div>
+
+    <div class="min-w-0">
+      <slot name="visual" />
+    </div>
+  </div>
+</section>

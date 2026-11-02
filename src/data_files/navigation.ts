@@ -4,6 +4,8 @@
  * (`copy.nav.labels`, `copy.nav.footer.sections`), so translators never touch
  * a path and code never keys on a translated label.
  */
+import { REPO_URL } from './constants';
+
 export type NavLinkId =
   | 'home'
   | 'portfolio'
@@ -63,7 +65,7 @@ export const footerSections: {
 export const socialLinks = {
   facebook: 'https://www.facebook.com/',
   x: 'https://twitter.com/',
-  github: 'https://github.com/xmore2025/web-xmore2025-screwfast-1021',
+  github: REPO_URL,
   google: 'https://www.google.com/',
   slack: 'https://slack.com/',
 };

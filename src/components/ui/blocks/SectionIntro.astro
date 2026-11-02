@@ -1,0 +1,44 @@
+---
+/**
+ * The title-and-standfirst block that opens a section inside a page (the
+ * insights strip on the blog index, the recent-notes strip on the home page).
+ *
+ * Centred when it introduces a section on its own, left-aligned with a link
+ * on the right when the section is one you can also browse in full.
+ */
+interface Props {
+  heading: string;
+  subTitle?: string;
+  /** Optional "view all" link, which also switches the block to left-aligned. */
+  action?: { label: string; href: string };
+}
+
+const { heading, subTitle, action } = Astro.props;
+---
+
+<div
+  class:list={[
+    'mb-8 flex flex-wrap items-end lg:mb-10',
+    action ? 'justify-between gap-4' : 'mx-auto max-w-2xl text-center',
+  ]}
+>
+  <div class:list={[!action && 'mx-auto', 'max-w-2xl']}>
+    <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200">
+      {heading}
+    </h2>
+    {subTitle && (
+      <p class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">
+        {subTitle}
+      </p>
+    )}
+  </div>
+
+  {action && (
+    <a
+      class="font-semibold text-neutral-800 underline underline-offset-4 transition hover:text-orange-500 dark:text-neutral-200"
+      href={action.href}
+    >
+      {action.label}
+    </a>
+  )}
+</div>

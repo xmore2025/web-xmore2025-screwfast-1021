@@ -36,7 +36,7 @@ const meta = [
 
 <a
   class:list={[
-    'group relative flex min-w-0 flex-col justify-end overflow-hidden bg-[#263a32] ring-[#d7f568] outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#17231f]',
+    'group relative flex min-w-0 flex-col justify-end overflow-hidden bg-brand-moss ring-brand-citrus outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ink',
     variant === 'hero' ? 'h-full min-h-44' : 'aspect-[4/3]',
   ]}
   href={summary.path}
@@ -61,14 +61,14 @@ const meta = [
   ></div>
 
   <span
-    class="absolute end-3 top-3 z-1 flex size-9 items-center justify-center rounded-full bg-[#d7f568] text-[#17231f] transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+    class="absolute end-3 top-3 z-1 flex size-9 items-center justify-center rounded-full bg-brand-citrus text-brand-ink transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
     aria-hidden="true"
   >
     <Icon name="arrowRight" class="size-4 -rotate-45" />
   </span>
 
   <div class="relative flex flex-col gap-1 p-4 sm:p-5">
-    <p class="flex items-center gap-2 text-xs font-semibold text-[#d7f568]">
+    <p class="flex items-center gap-2 text-xs font-semibold text-brand-citrus">
       <span aria-hidden="true">{summary.definition.emoji}</span>
       <span>{meta[0]}</span>
     </p>

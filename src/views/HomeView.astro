@@ -9,13 +9,14 @@ import TestimonialsSection from '@components/sections/testimonials/TestimonialsS
 import PricingSection from '@components/sections/pricing/PricingSection.astro';
 import FAQ from '@components/sections/misc/FAQ.astro';
 import AnnouncementBanner from '@components/ui/banners/AnnouncementBanner.astro';
+import SectionIntro from '@components/ui/blocks/SectionIntro.astro';
 import CardBlog from '@components/ui/cards/CardBlog.astro';
 import heroImage from '@images/personal/hero.avif';
 import featureImage from '@images/personal/feature-1.avif';
 import construction from '@images/personal/feature-1.avif';
 import tools from '@images/personal/hero.avif';
 import dashboard from '@images/personal/feature-1.avif';
-import { partnersData } from '@data/constants';
+import { partnersData, REPO_URL } from '@data/constants';
 import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 import { entriesFor } from '@utils/content';
@@ -44,7 +45,7 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
   <AnnouncementBanner
     btnId="dismiss-button"
     btnTitle={copy.banner}
-    url="https://github.com/xmore2025/web-xmore2025-screwfast-1021"
+    url={REPO_URL}
   />
 
   <HeroSection
@@ -109,22 +110,14 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
 
   {recentBlogPosts.length > 0 && (
     <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
-      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div class="max-w-2xl">
-          <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl dark:text-neutral-200">
-            {copy.blog.title}
-          </h2>
-          <p class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">
-            {copy.blog.subTitle}
-          </p>
-        </div>
-        <a
-          class="font-semibold text-neutral-800 underline underline-offset-4 transition hover:text-orange-500 dark:text-neutral-200"
-          href={localePath(locale, '/blog')}
-        >
-          {copy.blog.viewAll}
-        </a>
-      </div>
+      <SectionIntro
+        heading={copy.blog.title}
+        subTitle={copy.blog.subTitle}
+        action={{
+          label: copy.blog.viewAll,
+          href: localePath(locale, '/blog'),
+        }}
+      />
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {recentBlogPosts.map(blogEntry => (
           <CardBlog blogEntry={blogEntry} />
@@ -140,6 +133,6 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
   <HeroSectionAlt
     title={copy.heroAlt.title}
     subTitle={copy.heroAlt.subTitle}
-    url="https://github.com/xmore2025/web-xmore2025-screwfast-1021"
+    url={REPO_URL}
   />
 </MainLayout>

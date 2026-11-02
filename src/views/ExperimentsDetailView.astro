@@ -1,0 +1,155 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import CtaPanel from '@components/ui/blocks/CtaPanel.astro';
+import SectionIntro from '@components/ui/blocks/SectionIntro.astro';
+import CardExperiment from '@components/ui/cards/CardExperiment.astro';
+import { Image } from 'astro:assets';
+import { render, type CollectionEntry } from 'astro:content';
+import { entriesFor, localeOf } from '@utils/content';
+import { formatDate } from '@utils/utils';
+import { localePath } from '@utils/locale';
+import { EXPERIMENT_STATUS_STYLES } from '@data/experiment-statuses';
+import { getCopy } from '@/copy';
+
+/**
+ * One experiment. The locale is the entry's own.
+ *
+ * Deliberately the same skeleton as `PhotographyDetailView`: an archive entry
+ * should read the same whether it is a photograph or a piece of code.
+ */
+interface Props {
+  experiment: CollectionEntry<'experiments'>;
+}
+
+const { experiment } = Astro.props;
+const locale = localeOf(experiment);
+const t = getCopy(locale);
+const labels = t.experiments;
+const { Content } = await render(experiment);
+
+/** The rest of the archive, so the page is not a dead end. */
+const otherExperiments = (await entriesFor('experiments', locale))
+  .filter(entry => entry.id !== experiment.id)
+  .slice(0, 3);
+
+const status = experiment.data.status;
+---
+
+<MainLayout
+  title={experiment.data.title}
+  description={experiment.data.description}
+  section={labels.ogSection}
+  kind={{ type: 'Article', image: experiment.data.cardImage.src }}
+>
+  <section class="mx-auto max-w-[85rem] px-4 pt-6 sm:px-6 lg:px-8 lg:pt-10 2xl:max-w-full">
+    <div class="mx-auto max-w-[46rem] lg:max-w-[48rem] xl:max-w-[50rem]">
+      <nav aria-label="Breadcrumb" class="text-xs text-neutral-500">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li>
+            <a
+              class="transition hover:text-brand-rust dark:hover:text-brand-blush"
+              href={localePath(locale)}
+            >
+              {labels.breadcrumbHome}
+            </a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <a
+              class="transition hover:text-brand-rust dark:hover:text-brand-blush"
+              href={localePath(locale, '/experiments')}
+            >
+              {labels.breadcrumbExperiments}
+            </a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li
+            class="max-w-[14rem] truncate text-neutral-700 sm:max-w-md dark:text-neutral-300"
+            aria-current="page"
+          >
+            {experiment.data.title}
+          </li>
+        </ol>
+      </nav>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        {status && (
+          <span
+            class={`rounded-full px-3 py-1 text-xs font-medium ${EXPERIMENT_STATUS_STYLES[status]}`}
+          >
+            {labels.statusLabel}: {labels.statuses[status]}
+          </span>
+        )}
+        {experiment.data.experimentDate && (
+          <time
+            class="text-xs font-semibold tracking-[0.16em] text-brand-rust uppercase dark:text-brand-blush"
+            datetime={experiment.data.experimentDate.toISOString()}
+          >
+            {formatDate(experiment.data.experimentDate, locale)}
+          </time>
+        )}
+      </div>
+
+      <h1 class="mt-5 font-serif text-3xl leading-[1.12] text-balance text-neutral-900 sm:text-4xl lg:text-5xl xl:text-6xl dark:text-neutral-100">
+        {experiment.data.title}
+      </h1>
+
+      <p class="mt-5 text-base text-pretty text-neutral-600 sm:text-lg sm:leading-8 dark:text-neutral-400">
+        {experiment.data.description}
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto mt-10 max-w-[85rem] px-4 sm:px-6 lg:mt-14 lg:px-8 2xl:max-w-full">
+    <Image
+      class="aspect-[4/3] w-full object-cover sm:aspect-[16/9] lg:aspect-[21/9]"
+      src={experiment.data.cardImage}
+      alt={experiment.data.cardImageAlt}
+      format="avif"
+      widths={[480, 768, 1000, 1200]}
+      sizes="(min-width: 1360px) 1360px, 100vw"
+      loading="eager"
+      draggable={false}
+    />
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:py-16 2xl:max-w-full">
+    <div class="mx-auto max-w-[46rem] lg:max-w-[48rem] xl:max-w-[50rem]">
+      <article class="prose prose-base prose-neutral sm:prose-lg dark:prose-invert max-w-none text-pretty prose-headings:font-serif prose-headings:font-normal prose-headings:tracking-tight prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-2xl sm:prose-h2:text-3xl prose-p:leading-7 sm:prose-p:leading-8 prose-a:text-brand-rust prose-a:underline-offset-4 dark:prose-headings:text-neutral-100 dark:prose-a:text-brand-blush prose-blockquote:border-s-2 prose-blockquote:border-brand-citrus prose-blockquote:ps-5 prose-blockquote:not-italic prose-blockquote:text-neutral-600 dark:prose-blockquote:text-neutral-400 prose-li:leading-7 sm:prose-li:leading-8">
+        <Content />
+      </article>
+
+      {experiment.data.tags && experiment.data.tags.length > 0 && (
+        <div class="mt-12 flex flex-wrap gap-2 border-t border-neutral-300/80 pt-8 dark:border-neutral-700">
+          {experiment.data.tags.map(tag => (
+            <span class="border border-neutral-300 px-2 py-0.5 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  {otherExperiments.length > 0 && (
+    <section class="mx-auto max-w-[85rem] px-4 pb-16 sm:px-6 lg:px-8 2xl:max-w-full">
+      <div class="border-t border-neutral-300/80 pt-10 dark:border-neutral-700">
+        <SectionIntro heading={labels.moreExperiments} />
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {otherExperiments.map(entry => (
+            <CardExperiment experiment={entry} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaPanel
+    title={t.experimentsIndex.heading}
+    body={t.experimentsIndex.subTitle}
+    action={{
+      label: labels.backToArchive,
+      href: localePath(locale, '/experiments'),
+    }}
+  />
+</MainLayout>

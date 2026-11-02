@@ -42,7 +42,7 @@ const locale = localeOf(entry);
     </span>
 
     <span class="min-w-0">
-      <span class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold tracking-wide text-[#bb5d48] uppercase dark:text-[#ff9b83]">
+      <span class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold tracking-wide text-brand-rust uppercase dark:text-brand-blush">
         <time datetime={entry.data.pubDate.toISOString()}>
           {formatDate(entry.data.pubDate, locale)}
         </time>
@@ -53,7 +53,7 @@ const locale = localeOf(entry);
         <span>{copy.blog.minRead(entry.data.readTime)}</span>
       </span>
 
-      <span class="mt-2 block font-serif text-xl leading-snug text-neutral-900 group-hover:text-[#bb5d48] sm:text-2xl dark:text-neutral-100 dark:group-hover:text-[#ff9b83]">
+      <span class="mt-2 block font-serif text-xl leading-snug text-neutral-900 group-hover:text-brand-rust sm:text-2xl dark:text-neutral-100 dark:group-hover:text-brand-blush">
         {entry.data.title}
       </span>
 
@@ -74,7 +74,7 @@ const locale = localeOf(entry);
 
     <Icon
       name="arrowRight"
-      class="mt-1 size-5 shrink-0 text-neutral-400 transition group-hover:translate-x-1 group-hover:text-[#bb5d48] dark:group-hover:text-[#ff9b83]"
+      class="mt-1 size-5 shrink-0 text-neutral-400 transition group-hover:translate-x-1 group-hover:text-brand-rust dark:group-hover:text-brand-blush"
     />
   </a>
 </li>

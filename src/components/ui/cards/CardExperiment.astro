@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '@components/ui/icons/Icon.astro';
+import type { CollectionEntry } from 'astro:content';
+import { pathFor } from '@utils/content';
+import { EXPERIMENT_STATUS_STYLES } from '@data/experiment-statuses';
+
+/**
+ * One experiment in the archive. Takes an entry and nothing else — the path
+ * and the localised status name come from the content and copy modules.
+ */
+interface Props {
+  experiment: CollectionEntry<'experiments'>;
+}
+
+const { experiment } = Astro.props;
+const { experiments: labels } = Astro.locals.copy;
+const status = experiment.data.status;
+---
+
+<a
+  class="group flex flex-col rounded-xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 transition duration-300 hover:shadow-md dark:bg-neutral-900 dark:ring-zinc-800"
+  href={pathFor(experiment)}
+>
+  <div class="relative mb-4 overflow-hidden rounded-lg">
+    <Image
+      class="aspect-video w-full object-cover transition duration-500 group-hover:scale-105"
+      src={experiment.data.cardImage}
+      alt={experiment.data.cardImageAlt}
+      format={'avif'}
+    />
+  </div>
+
+  <div class="flex items-start justify-between gap-2">
+    <h3 class="text-lg font-bold text-neutral-800 group-hover:text-neutral-600 dark:text-neutral-200 dark:group-hover:text-neutral-400">
+      {experiment.data.title}
+    </h3>
+    {status && (
+      <span
+        class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${EXPERIMENT_STATUS_STYLES[status]}`}
+      >
+        {labels.statuses[status]}
+      </span>
+    )}
+  </div>
+
+  <p class="mt-2 flex-1 text-sm text-neutral-600 dark:text-neutral-400">
+    {experiment.data.description}
+  </p>
+
+  {experiment.data.tags && experiment.data.tags.length > 0 && (
+    <div class="mt-4 flex flex-wrap gap-2">
+      {experiment.data.tags.map(tag => (
+        <span class="rounded-md bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
+          #{tag}
+        </span>
+      ))}
+    </div>
+  )}
+
+  <p class="mt-4 inline-flex items-center gap-x-1 text-sm font-medium text-orange-400 group-hover:underline dark:text-orange-300">
+    {Astro.locals.copy.experimentsIndex.readMore}
+    <Icon name="arrowRight" class="size-4 shrink-0" />
+  </p>
+</a>

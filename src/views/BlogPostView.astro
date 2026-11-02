@@ -74,7 +74,7 @@ const postCategories = categoriesOf(post).map(id => ({
         <ol class="flex flex-wrap items-center gap-2">
           <li>
             <a
-              class="transition hover:text-[#bb5d48] dark:hover:text-[#ff9b83]"
+              class="transition hover:text-brand-rust dark:hover:text-brand-blush"
               href={localePath(locale)}
             >
               {t.blog.breadcrumbHome}
@@ -83,7 +83,7 @@ const postCategories = categoriesOf(post).map(id => ({
           <li aria-hidden="true">/</li>
           <li>
             <a
-              class="transition hover:text-[#bb5d48] dark:hover:text-[#ff9b83]"
+              class="transition hover:text-brand-rust dark:hover:text-brand-blush"
               href={localePath(locale, '/blog')}
             >
               {t.blog.breadcrumbBlog}
@@ -99,7 +99,7 @@ const postCategories = categoriesOf(post).map(id => ({
         </ol>
       </nav>
 
-      <p class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold tracking-[0.16em] text-[#bb5d48] uppercase lg:mt-12 dark:text-[#ff9b83]">
+      <p class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold tracking-[0.16em] text-brand-rust uppercase lg:mt-12 dark:text-brand-blush">
         <time datetime={post.data.pubDate.toISOString()}>
           {formatDate(post.data.pubDate, locale)}
         </time>
@@ -147,7 +147,7 @@ const postCategories = categoriesOf(post).map(id => ({
 
   <section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:py-16 2xl:max-w-full">
     <div class:list={['mx-auto', READING_MEASURE]}>
-      <article class="prose prose-base prose-neutral sm:prose-lg dark:prose-invert max-w-none text-pretty prose-headings:font-serif prose-headings:font-normal prose-headings:tracking-tight prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-2xl sm:prose-h2:text-3xl prose-p:leading-7 sm:prose-p:leading-8 prose-a:text-[#bb5d48] prose-a:underline-offset-4 dark:prose-headings:text-neutral-100 dark:prose-a:text-[#ff9b83] prose-blockquote:border-s-2 prose-blockquote:border-[#d7f568] prose-blockquote:ps-5 prose-blockquote:not-italic prose-blockquote:text-neutral-600 dark:prose-blockquote:text-neutral-400 prose-li:leading-7 sm:prose-li:leading-8">
+      <article class="prose prose-base prose-neutral sm:prose-lg dark:prose-invert max-w-none text-pretty prose-headings:font-serif prose-headings:font-normal prose-headings:tracking-tight prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-2xl sm:prose-h2:text-3xl prose-p:leading-7 sm:prose-p:leading-8 prose-a:text-brand-rust prose-a:underline-offset-4 dark:prose-headings:text-neutral-100 dark:prose-a:text-brand-blush prose-blockquote:border-s-2 prose-blockquote:border-brand-citrus prose-blockquote:ps-5 prose-blockquote:not-italic prose-blockquote:text-neutral-600 dark:prose-blockquote:text-neutral-400 prose-li:leading-7 sm:prose-li:leading-8">
         <Content />
       </article>
 
@@ -159,7 +159,7 @@ const postCategories = categoriesOf(post).map(id => ({
             </span>
             {postCategories.map(category => (
               <a
-                class="inline-flex items-center gap-1.5 border border-neutral-400/70 px-2.5 py-1 text-xs text-neutral-700 transition hover:border-[#17231f] hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-[#d7f568] dark:hover:text-white"
+                class="inline-flex items-center gap-1.5 border border-neutral-400/70 px-2.5 py-1 text-xs text-neutral-700 transition hover:border-brand-ink hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-brand-citrus dark:hover:text-white"
                 href={category.path}
                 data-astro-prefetch
               >

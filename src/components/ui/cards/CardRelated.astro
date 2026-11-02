@@ -33,10 +33,10 @@ const { blogEntry } = Astro.props;
       sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
     />
   </div>
-  <p class="mt-4 text-xs font-semibold tracking-[0.16em] text-[#bb5d48] uppercase dark:text-[#ff9b83]">
+  <p class="mt-4 text-xs font-semibold tracking-[0.16em] text-brand-rust uppercase dark:text-brand-blush">
     {formatDate(blogEntry.data.pubDate, localeOf(blogEntry))}
   </p>
-  <h3 class="mt-2 font-serif text-lg leading-snug text-balance text-neutral-900 group-hover:text-[#bb5d48] sm:text-xl dark:text-neutral-100 dark:group-hover:text-[#ff9b83]">
+  <h3 class="mt-2 font-serif text-lg leading-snug text-balance text-neutral-900 group-hover:text-brand-rust sm:text-xl dark:text-neutral-100 dark:group-hover:text-brand-blush">
     {blogEntry.data.title}
   </h3>
 </a>

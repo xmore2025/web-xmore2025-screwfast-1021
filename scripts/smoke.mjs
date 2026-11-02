@@ -19,6 +19,10 @@ const MARKETING_ROUTES = [
   '/categories/',
   '/categories/notes/',
   '/insights/insight-1/',
+  '/photography/',
+  '/photography/photo-1/',
+  '/experiments/',
+  '/experiments/exp-1/',
   '/contact/',
 ];
 const ROUTES = [
@@ -51,6 +55,13 @@ const EXPECTATIONS = {
   '/zh/categories/': ['"@type":"CollectionPage"', 'data-category-row'],
   '/categories/notes/': ['"@type":"ItemList"'],
   '/zh/categories/notes/': ['"inLanguage":"zh-CN"'],
+  // The archive entry pages used to link to routes that did not exist.
+  '/photography/': ['"@type":"CollectionPage"'],
+  '/photography/photo-1/': ['"@type":"Article"', 'Fujifilm'],
+  '/zh/photography/photo-1/': ['"inLanguage":"zh-CN"', '街头'],
+  '/experiments/': ['"@type":"CollectionPage"'],
+  '/experiments/exp-1/': ['"@type":"Article"'],
+  '/zh/experiments/exp-1/': ['"inLanguage":"zh-CN"', '已完成'],
 };
 
 const MIME = {

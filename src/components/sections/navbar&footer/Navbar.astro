@@ -198,7 +198,7 @@ const isDarkHeroPage = DARK_HERO_ROUTES.some(route =>
     position: absolute;
     inset: -1rem 0 auto 0;
     height: calc(100% + 1rem);
-    background-color: #17231f;
+    background-color: var(--color-brand-ink);
     z-index: -1;
   }
 
@@ -247,7 +247,7 @@ const isDarkHeroPage = DARK_HERO_ROUTES.some(route =>
   }
 
   [data-navbar-tone='on-dark'] nav a[aria-current='page'] {
-    color: #d7f568;
+    color: var(--color-brand-citrus);
   }
 
   /* 登录按钮左侧分隔线 */

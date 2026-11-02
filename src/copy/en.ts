@@ -188,6 +188,49 @@ export const en = {
     ogSection: 'Insights',
   },
 
+  /**
+   * Collection-level copy for photography: names of the archive's shelves,
+   * keyed by the language-neutral frontmatter id, plus what a single photo
+   * page needs. The index page's own copy is in `photographyIndex`.
+   */
+  photography: {
+    ogSection: 'Photography',
+    /** Breadcrumb trail above a photo. */
+    breadcrumbHome: 'Home',
+    breadcrumbPhotography: 'Photography',
+    categories: {
+      street: 'Street',
+      portrait: 'Portrait',
+      landscape: 'Landscape',
+      abstract: 'Abstract',
+      experiment: 'Experiment',
+    },
+    /** Labels for the photo's metadata list. */
+    shotOn: 'Shot on',
+    location: 'Location',
+    camera: 'Camera',
+    /** Footer of a photo page. */
+    morePhotos: 'More from the archive',
+    backToArchive: 'Back to photography',
+  },
+
+  /** Collection-level copy for experiments; index copy is `experimentsIndex`. */
+  experiments: {
+    ogSection: 'Experiments',
+    breadcrumbHome: 'Home',
+    breadcrumbExperiments: 'Experiments',
+    statuses: {
+      idea: 'Idea',
+      'in-progress': 'In progress',
+      done: 'Done',
+      archived: 'Archived',
+    },
+    statusLabel: 'Status',
+    /** Footer of an experiment page. */
+    moreExperiments: 'More experiments',
+    backToArchive: 'Back to experiments',
+  },
+
   products: {
     ogSection: 'creative tools',
     tabs: 'Tabs',

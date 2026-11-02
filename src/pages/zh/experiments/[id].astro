@@ -1,0 +1,10 @@
+---
+import ExperimentsDetailView from '@views/ExperimentsDetailView.astro';
+import { staticPathsFor } from '@utils/content';
+
+export const getStaticPaths = () => staticPathsFor('experiments', 'zh');
+
+const { entry } = Astro.props;
+---
+
+<ExperimentsDetailView experiment={entry} />
